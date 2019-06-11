@@ -1,7 +1,7 @@
 // config used by server side only
 const dbHost = process.env.DB_HOST || '127.0.0.1';
 const dbPort = process.env.DB_PORT || 27017;
-const dbName = process.env.DB_NAME || 'shop';
+const dbName = process.env.DB_NAME || 'market';
 const dbUser = process.env.DB_USER || '';
 const dbPass = process.env.DB_PASS || '';
 const dbCred =
@@ -37,7 +37,7 @@ module.exports = {
 		filesUploadPath: 'assets',
 
 		// S3 Config
-		bucket: 'cezerin2-asset-test'
+		bucket: 'medistream-warehouse'
 	},
 
 	// smpt server parameters
@@ -65,7 +65,7 @@ module.exports = {
 
 	// cost factor, controls how much time is needed to calculate a single BCrypt hash
 	// for production: recommended salRounds > 12
-	saltRounds: process.env.SALT_ROUNDS || 12,
+	saltRounds: process.env.SALT_ROUNDS || 12
 
-	developerMode: process.env.DEVELOPER_MODE || true
+	// developerMode: process.env.DEVELOPER_MODE || true
 };

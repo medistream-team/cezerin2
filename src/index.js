@@ -16,6 +16,8 @@ const STATIC_OPTIONS = {
 	maxAge: 31536000000 // One year
 };
 
+Error.stackTraceLimit = Infinity;
+
 app.set('trust proxy', 1);
 app.use(helmet());
 

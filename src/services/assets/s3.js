@@ -1,7 +1,7 @@
 import AWS from 'aws-sdk';
 import fs from 'fs';
 import formidable from 'formidable';
-import path from 'path';
+import * as _path from 'path';
 import utils from '../../lib/utils';
 import settings from '../../lib/settings';
 
@@ -51,7 +51,7 @@ class S3Service {
 
 	getFiles(path) {
 		return new Promise((resolve, reject) => {
-			s3.ListObjects({ Key: path, Bucket: BUCKET }, (err, data) => {
+			s3.listObjects({ Prefix: path, Bucket: BUCKET }, (err, data) => {
 				if (err) {
 					return reject(err);
 				}
@@ -69,17 +69,12 @@ class S3Service {
 		return new Promise((resolve, reject) => {
 			const params = {
 				Bucket: BUCKET,
-				Delete: {
-					Objects: [
-						{
-							Key: `${path}/${fileName}`
-						}
-					]
-				}
+				Key: fileName
 			};
 
 			s3.deleteObject(params, (err, data) => {
 				if (err) {
+					console.log(err);
 					return reject('File not found');
 				}
 				resolve();
@@ -127,7 +122,7 @@ class S3Service {
 			.on('file', (name, file) => {
 				// every time a file has been uploaded successfully,
 				file_name = file.name;
-				buffer = fs.readFileSync(path.resolve(file.path));
+				buffer = fs.readFileSync(_path.resolve(file.path));
 			})
 			.on('error', err => {
 				res.status(500).send(this.getErrorMessage(err));

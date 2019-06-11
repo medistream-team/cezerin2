@@ -22,7 +22,7 @@ class FilesRoute {
 			this.uploadFile.bind(this)
 		);
 		this.router.delete(
-			'/v1/files/:file',
+			'/v1/files/:file(*)',
 			security.checkUserScope.bind(this, security.scope.WRITE_FILES),
 			this.deleteFile.bind(this)
 		);
@@ -44,6 +44,9 @@ class FilesRoute {
 	}
 
 	deleteFile(req, res, next) {
+		console.group('DELETE FILE REQ RECEIVED');
+		// console.log(req);
+		console.groupEnd();
 		AssetsService.deleteFile(
 			settings.assetServer.filesUploadPath,
 			req.params.file
