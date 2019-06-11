@@ -21,5 +21,4 @@ dist/*
 logs/*.log
 npm-debug.log*
 *.zip
-.ecosystem.config.js
-
+ecosystem.config.js
