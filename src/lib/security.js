@@ -93,7 +93,8 @@ const applyMiddleware = app => {
 };
 
 const getAccessControlAllowOrigin = () =>
-	[settings.storeBaseUrl, settings.adminBaseURL] || '*';
+	[settings.storeBaseUrl, settings.adminBaseURL, 'http://localhost:8080'] ||
+	'*';
 
 export default {
 	checkUserScope,
