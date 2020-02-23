@@ -12,7 +12,8 @@ const upload = (file_name, file) => {
 	const s3Config = {
 		Bucket: BUCKET,
 		Key: file_name,
-		Body: file
+		Body: file,
+		ACL: 'public-read'
 	};
 	return new Promise((resolve, reject) => {
 		s3.putObject(s3Config, (err, resp) => {
@@ -130,7 +131,7 @@ class S3Service {
 			.on('end', () => {
 				upload(`${path}/${file_name}`, buffer)
 					.then(async fileData => {
-						await onUploadEnd(`${path}/${file_name}`);
+						await onUploadEnd(`${file_name}`);
 						res.json({
 							successful: true,
 							fileData
