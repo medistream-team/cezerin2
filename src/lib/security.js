@@ -93,8 +93,12 @@ const applyMiddleware = app => {
 };
 
 const getAccessControlAllowOrigin = () =>
-	[settings.storeBaseUrl, settings.adminBaseURL, 'http://localhost:8080'] ||
-	'*';
+	[
+		settings.storeBaseUrl,
+		settings.adminBaseURL,
+		'http://localhost:8080',
+		'http://dev.medistream.co.kr'
+	] || '*';
 
 export default {
 	checkUserScope,
