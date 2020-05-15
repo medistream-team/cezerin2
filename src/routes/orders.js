@@ -330,7 +330,7 @@ class OrdersRoute {
 	async updateDiscount(req, res, next) {
 		try {
 			const order_id = req.params.id;
-			const discount_id = req.params.item_id;
+			const discount_id = req.params.discount_id;
 			const data = await OrdertDiscountsService.updateDiscount(
 				order_id,
 				discount_id,
@@ -345,7 +345,7 @@ class OrdersRoute {
 	async deleteDiscount(req, res, next) {
 		try {
 			const order_id = req.params.id;
-			const discount_id = req.params.item_id;
+			const discount_id = req.params.discount_id;
 			const data = await OrdertDiscountsService.deleteDiscount(
 				order_id,
 				discount_id
