@@ -6,14 +6,14 @@ import parse from '../../lib/parse';
 import OrdersService from './orders';
 
 class OrdertDiscountsService {
-	addDiscount(order_id, data) {
+	async addDiscount(order_id, data) {
 		if (!ObjectID.isValid(order_id)) {
 			return Promise.reject('Invalid identifier');
 		}
 		const orderObjectID = new ObjectID(order_id);
 		const discount = this.getValidDocumentForInsert(data);
 
-		return db.collection('orders').updateOne(
+		await db.collection('orders').updateOne(
 			{
 				_id: orderObjectID
 			},
@@ -23,6 +23,8 @@ class OrdertDiscountsService {
 				}
 			}
 		);
+
+		return discount;
 	}
 
 	updateDiscount(order_id, discount_id, data) {
@@ -73,7 +75,7 @@ class OrdertDiscountsService {
 		return {
 			id: new ObjectID(),
 			name: parse.getString(data.name),
-			amount: parse.getNumberIfPositive(data.amount)
+			amount: parse.getNumberIfPositive(data.amount) || 0
 		};
 	}
 
@@ -84,11 +86,11 @@ class OrdertDiscountsService {
 
 		const discount = {};
 
-		if (data.variant_id !== undefined) {
+		if (data.name !== undefined) {
 			discount['discounts.$.name'] = parse.getString(data.name);
 		}
 
-		if (data.quantity !== undefined) {
+		if (data.amount !== undefined) {
 			discount['discounts.$.amount'] = parse.getNumberIfPositive(data.amount);
 		}
 

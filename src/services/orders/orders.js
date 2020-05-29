@@ -650,9 +650,9 @@ class OrdersService {
 				(order.shipping_tax_included ? 0 : order.shipping_tax);
 
 			if (order.discounts && order.discounts.length > 0) {
-				order.items.forEach(item => {
-					if (item.amount > 0) {
-						sum_discounts_amount += item.amount;
+				order.discounts.forEach(discount => {
+					if (discount.amount > 0) {
+						sum_discounts_amount += discount.amount;
 					}
 				});
 			}

@@ -336,7 +336,9 @@ class OrdersRoute {
 				discount_id,
 				req.body
 			);
-			return data ? res.send(data) : res.status(404).end();
+			return data
+				? res.send({ discounts: data && data.discounts })
+				: res.status(404).end();
 		} catch (err) {
 			return next(err);
 		}
@@ -350,7 +352,7 @@ class OrdersRoute {
 				order_id,
 				discount_id
 			);
-			return res.send(data);
+			return res.send({ discounts: data && data.discounts });
 		} catch (err) {
 			return next(err);
 		}
