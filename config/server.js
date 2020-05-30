@@ -1,14 +1,14 @@
 // config used by server side only
-const dbHost = process.env.DB_HOST || "127.0.0.1";
-const dbPort = process.env.DB_PORT || 27017;
-const dbName = process.env.DB_NAME || "market";
-const dbUser = process.env.DB_USER || "";
-const dbPass = process.env.DB_PASS || "";
+const dbHost = process.env.DB_HOST || "127.0.0.1"
+const dbPort = process.env.DB_PORT || 27017
+const dbName = process.env.DB_NAME || "market"
+const dbUser = process.env.DB_USER || ""
+const dbPass = process.env.DB_PASS || ""
 const dbCred =
-  dbUser.length > 0 || dbPass.length > 0 ? `${dbUser}:${dbPass}@` : "";
+  dbUser.length > 0 || dbPass.length > 0 ? `${dbUser}:${dbPass}@` : ""
 
 const dbUrl =
-  process.env.DB_URL || `mongodb://${dbCred}${dbHost}:${dbPort}/${dbName}`;
+  process.env.DB_URL || `mongodb://${dbCred}${dbHost}:${dbPort}/${dbName}`
 
 module.exports = {
   // used by Store (server side)
@@ -36,15 +36,9 @@ module.exports = {
     themeImageUploadPath: "assets/images",
     filesUploadPath: "assets",
 
-<<<<<<< HEAD
-		// S3 Config
-		bucket: 'medistream-warehouse'
-	},
-=======
     // S3 Config
-    bucket: "cezerin2-asset-test",
+    bucket: "medistream-warehouse",
   },
->>>>>>> 75f84ab9da8a678550acca2e4fcb9b03e49b2527
 
   // smpt server parameters
   smtpServer: {
@@ -69,17 +63,9 @@ module.exports = {
   // used by API
   orderStartNumber: 1000,
 
-<<<<<<< HEAD
-	// cost factor, controls how much time is needed to calculate a single BCrypt hash
-	// for production: recommended salRounds > 12
-	saltRounds: process.env.SALT_ROUNDS || 12
-
-	// developerMode: process.env.DEVELOPER_MODE || true
-=======
   // cost factor, controls how much time is needed to calculate a single BCrypt hash
   // for production: recommended salRounds > 12
   saltRounds: process.env.SALT_ROUNDS || 12,
 
   developerMode: process.env.DEVELOPER_MODE || true,
->>>>>>> 75f84ab9da8a678550acca2e4fcb9b03e49b2527
-};
+}
