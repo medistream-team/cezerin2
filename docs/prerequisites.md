@@ -7,7 +7,29 @@
 
   - **Mongodb `>= 3.2`**
 
-  - **Node.js `>= v8.11.3`** [Installing Node.js via package manager](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+[MongoDB 4.x Installation Guide.](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)
+
+Console command:
+```
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+systemctl start mongod
+systemctl enable mongod
+```
+
+  - **Node.js `v11.x`**
+  
+  NodeJS 11.x installation:
+  ```shell
+# Using Ubuntu
+curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+sudo apt-get install -y nodejs
+# Using Debian, as root
+curl -sL https://deb.nodesource.com/setup_11.x | bash -
+apt-get install -y nodejs (edited) 
+  ```
 
   - **NPM `>= 6.3.0`** 
   ```shell
