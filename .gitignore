@@ -26,6 +26,7 @@ npm-debug.log*
 *.log
 *lock.json
 build
+.idea
 
 # fork rule
 ecosystem.config.js
