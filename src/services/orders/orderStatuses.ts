@@ -3,8 +3,8 @@ import { db } from "../../lib/mongo"
 import parse from "../../lib/parse"
 
 class OrderStatusesService {
-  getStatuses(params = {}) {
-    const filter = {}
+  getStatuses(params: any = {}) {
+    const filter: any = {}
     const id = parse.getObjectIDIfValid(params.id)
     if (id) {
       filter._id = new ObjectID(id)
@@ -64,7 +64,7 @@ class OrderStatusesService {
   }
 
   getValidDocumentForInsert(data) {
-    const status = {}
+    const status: any = {}
 
     status.name = parse.getString(data.name)
     status.description = parse.getString(data.description)
@@ -75,12 +75,12 @@ class OrderStatusesService {
     return status
   }
 
-  getValidDocumentForUpdate(id, data) {
+  getValidDocumentForUpdate(id, data: any) {
     if (Object.keys(data).length === 0) {
       return new Error("Required fields are missing")
     }
 
-    const status = {}
+    const status: any = {}
 
     if (data.name !== undefined) {
       status.name = parse.getString(data.name)
@@ -105,7 +105,7 @@ class OrderStatusesService {
     return status
   }
 
-  changeProperties(item) {
+  changeProperties(item: any) {
     if (item) {
       item.id = item._id.toString()
       delete item._id

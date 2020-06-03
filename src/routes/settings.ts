@@ -6,8 +6,7 @@ import ImportSettingsService from "../services/settings/import"
 import SettingsService from "../services/settings/settings"
 
 class SettingsRoute {
-  constructor(router) {
-    this.router = router
+  constructor(public router) {
     this.registerRoutes()
   }
 

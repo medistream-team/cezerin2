@@ -8,8 +8,8 @@ import AssetService from "../assets/assets"
 import SettingsService from "../settings/settings"
 
 class ProductCategoriesService {
-  getFilter(params = {}) {
-    const filter = {}
+  getFilter(params: any = {}) {
+    const filter: any = {}
     const enabled = parse.getBooleanIfValid(params.enabled)
     if (enabled !== null) {
       filter.enabled = enabled
@@ -21,7 +21,7 @@ class ProductCategoriesService {
     return filter
   }
 
-  async getCategories(params = {}) {
+  async getCategories(params: any = {}) {
     const filter = this.getFilter(params)
     const projection = utils.getProjectionFromFields(params.fields)
     const generalSettings = await SettingsService.getSettings()
@@ -159,7 +159,7 @@ class ProductCategoriesService {
   getValidDocumentForInsert(data, newPosition) {
     //  Allow empty category to create draft
 
-    const category = {
+    const category: any = {
       date_created: new Date(),
       date_updated: null,
       image: "",
@@ -193,7 +193,7 @@ class ProductCategoriesService {
         reject("Required fields are missing")
       }
 
-      const category = {
+      const category: any = {
         date_updated: new Date(),
       }
 

@@ -5,41 +5,43 @@ import LiqPay from "./LiqPay"
 import PayPalCheckout from "./PayPalCheckout"
 import StripeElements from "./StripeElements"
 
-const getOptions = orderId =>
-  Promise.all([
+const getOptions = async orderId => {
+  const [order, settings] = await Promise.all([
     OrdersService.getSingleOrder(orderId),
     SettingsService.getSettings(),
-  ]).then(([order, settings]) => {
-    if (order && order.payment_method_id) {
-      return PaymentGatewaysService.getGateway(
-        order.payment_method_gateway
-      ).then(gatewaySettings => {
-        const options = {
-          gateway: order.payment_method_gateway,
-          gatewaySettings,
-          order,
-          amount: order.grand_total,
-          currency: settings.currency_code,
-        }
+  ])
 
-        return options
-      })
-    }
-  })
+  if (order && order.payment_method_id) {
+    const gatewaySettings = await PaymentGatewaysService.getGateway(
+      order.payment_method_gateway
+    )
 
-const getPaymentFormSettings = orderId =>
-  getOptions(orderId).then(options => {
-    switch (options.gateway) {
-      case "paypal-checkout":
-        return PayPalCheckout.getPaymentFormSettings(options)
-      case "liqpay":
-        return LiqPay.getPaymentFormSettings(options)
-      case "stripe-elements":
-        return StripeElements.getPaymentFormSettings(options)
-      default:
-        return Promise.reject("Invalid gateway")
+    const options = {
+      gateway: order.payment_method_gateway,
+      gatewaySettings,
+      order,
+      amount: order.grand_total,
+      currency: settings.currency_code,
     }
-  })
+
+    return options
+  }
+}
+
+const getPaymentFormSettings = async orderId => {
+  const options = await getOptions(orderId)
+
+  switch (options.gateway) {
+    case "paypal-checkout":
+      return PayPalCheckout.getPaymentFormSettings(options)
+    case "liqpay":
+      return LiqPay.getPaymentFormSettings(options)
+    case "stripe-elements":
+      return StripeElements.getPaymentFormSettings(options)
+    default:
+      return Promise.reject("Invalid gateway")
+  }
+}
 
 const paymentNotification = (req, res, gateway) =>
   PaymentGatewaysService.getGateway(gateway).then(gatewaySettings => {

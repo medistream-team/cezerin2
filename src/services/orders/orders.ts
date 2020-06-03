@@ -19,9 +19,9 @@ import ShippingMethodsLightService from "./shippingMethodsLight"
 const { saltRounds } = settings
 
 class OrdersService {
-  getFilter(params = {}) {
+  getFilter(params: any = {}) {
     // TODO: sort, coupon, tag, channel
-    const filter = {}
+    const filter: any = {}
     const id = parse.getObjectIDIfValid(params.id)
     const status_id = parse.getObjectIDIfValid(params.status_id)
     const customer_id = parse.getObjectIDIfValid(params.customer_id)
@@ -342,7 +342,7 @@ class OrdersService {
           orderNumber = items[0].number + 1
         }
 
-        const order = {
+        const order: any = {
           date_created: new Date(),
           date_placed: null,
           date_updated: null,
@@ -435,7 +435,7 @@ class OrdersService {
         reject(new Error("Required fields are missing"))
       }
 
-      const order = {
+      const order: any = {
         date_updated: new Date(),
       }
 

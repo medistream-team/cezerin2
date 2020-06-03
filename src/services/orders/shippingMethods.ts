@@ -6,9 +6,9 @@ import PaymentMethodsService from "./paymentMethods"
 import ShippingMethodsLightService from "./shippingMethodsLight"
 
 class ShippingMethodsService {
-  getFilter(params = {}) {
+  getFilter(params: any = {}) {
     return new Promise((resolve, reject) => {
-      const filter = {}
+      const filter: any = {}
       const id = parse.getObjectIDIfValid(params.id)
       const enabled = parse.getBooleanIfValid(params.enabled)
 
@@ -226,7 +226,7 @@ class ShippingMethodsService {
   }
 
   getValidDocumentForInsert(data) {
-    const method = {
+    const method: any = {
       // 'logo': '',
       // 'app_id': null,
       // 'app_settings': {}
@@ -243,12 +243,12 @@ class ShippingMethodsService {
     return method
   }
 
-  getValidDocumentForUpdate(id, data) {
+  getValidDocumentForUpdate(id, data: any) {
     if (Object.keys(data).length === 0) {
       return new Error("Required fields are missing")
     }
 
-    const method = {}
+    const method: any = {}
 
     if (data.name !== undefined) {
       method.name = parse.getString(data.name)

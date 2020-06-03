@@ -2,7 +2,7 @@ import security from "../lib/security"
 import CategoriesService from "../services/products/productCategories"
 
 class ProductCategoriesRoute {
-  constructor(router) {
+  constructor(public router) {
     this.router = router
     this.registerRoutes()
   }
@@ -107,7 +107,7 @@ class ProductCategoriesRoute {
   }
 
   uploadCategoryImage(req, res, next) {
-    CategoriesService.uploadCategoryImage(req, res, next)
+    CategoriesService.uploadCategoryImage(req, res)
   }
 
   deleteCategoryImage(req, res, next) {

@@ -2,8 +2,7 @@ import security from "../lib/security"
 import PagesService from "../services/pages/pages"
 
 class PagesRoute {
-  constructor(router) {
-    this.router = router
+  constructor(public router) {
     this.registerRoutes()
   }
 

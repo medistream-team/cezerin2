@@ -2,8 +2,7 @@ import security from "../lib/security"
 import SecurityTokensService from "../services/security/tokens"
 
 class SecurityTokensRoute {
-  constructor(router) {
-    this.router = router
+  constructor(public router) {
     this.registerRoutes()
   }
 

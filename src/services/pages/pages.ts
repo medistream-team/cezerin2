@@ -8,8 +8,8 @@ import SettingsService from "../settings/settings"
 const DEFAULT_SORT = { is_system: -1, date_created: 1 }
 
 class PagesService {
-  getFilter(params = {}) {
-    const filter = {}
+  getFilter(params: any = {}) {
+    const filter: any = {}
     const id = parse.getObjectIDIfValid(params.id)
     const tags = parse.getString(params.tags)
     if (id) {
@@ -25,6 +25,7 @@ class PagesService {
     if (sort && sort.length > 0) {
       const fields = sort.split(",")
       return Object.assign(
+        {},
         ...fields.map(field => ({
           [field.startsWith("-") ? field.slice(1) : field]: field.startsWith(
             "-"
@@ -37,7 +38,7 @@ class PagesService {
     return DEFAULT_SORT
   }
 
-  async getPages(params = {}) {
+  async getPages(params: any = {}) {
     const filter = this.getFilter(params)
     const sortQuery = this.getSortQuery(params)
     const projection = utils.getProjectionFromFields(params.fields)
@@ -96,7 +97,7 @@ class PagesService {
   }
 
   getValidDocumentForInsert(data) {
-    const page = {
+    const page: any = {
       is_system: false,
       date_created: new Date(),
     }
@@ -123,7 +124,7 @@ class PagesService {
       return Promise.reject("Required fields are missing")
     }
     return this.getSinglePage(id).then(prevPageData => {
-      const page = {
+      const page: any = {
         date_updated: new Date(),
       }
 

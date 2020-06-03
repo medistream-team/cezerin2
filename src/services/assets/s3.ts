@@ -60,7 +60,7 @@ class S3Service {
         }
         const filesData = data.Contents.map(ObjectData => ({
           file: ObjectData.Key,
-          size: data.Size,
+          // size: data.Size,
           modified: ObjectData.LastModified,
         }))
         resolve(filesData)

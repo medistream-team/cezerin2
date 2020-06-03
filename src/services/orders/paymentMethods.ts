@@ -5,9 +5,9 @@ import OrdersService from "./orders"
 import PaymentMethodsLightService from "./paymentMethodsLight"
 
 class PaymentMethodsService {
-  getFilter(params = {}) {
+  getFilter(params: any = {}) {
     return new Promise((resolve, reject) => {
-      const filter = {}
+      const filter: any = {}
       const id = parse.getObjectIDIfValid(params.id)
       const enabled = parse.getBooleanIfValid(params.enabled)
 
@@ -185,7 +185,7 @@ class PaymentMethodsService {
   }
 
   getValidDocumentForInsert(data) {
-    const method = {}
+    const method: any = {}
 
     method.name = parse.getString(data.name)
     method.description = parse.getString(data.description)
@@ -198,7 +198,7 @@ class PaymentMethodsService {
   }
 
   getValidDocumentForUpdate(id, data) {
-    const method = {}
+    const method: any = {}
 
     if (data.name !== undefined) {
       method.name = parse.getString(data.name)

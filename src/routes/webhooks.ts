@@ -2,8 +2,7 @@ import security from "../lib/security"
 import WebhooksService from "../services/webhooks"
 
 class WebhooksRoute {
-  constructor(router) {
-    this.router = router
+  constructor(public router) {
     this.registerRoutes()
   }
 
@@ -37,7 +36,7 @@ class WebhooksRoute {
 
   async getWebhooks(req, res, next) {
     try {
-      const data = await WebhooksService.getWebhooks(req.query)
+      const data = await WebhooksService.getWebhooks()
       return res.send(data)
     } catch (err) {
       return next(err)

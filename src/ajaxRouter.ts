@@ -11,6 +11,7 @@ import serverSettings from "./lib/settings"
 import OrderItemsService from "./services/orders/orderItems"
 import EmailTemplatesService from "./services/settings/emailTemplates"
 import SettingsService from "./services/settings/settings"
+import { CookieOptions } from "express"
 
 // cost factor for hashes
 const { saltRounds } = serverSettings
@@ -28,7 +29,7 @@ const DEFAULT_CACHE_CONTROL = "public, max-age=60"
 const PRODUCTS_CACHE_CONTROL = "public, max-age=60"
 const PRODUCT_DETAILS_CACHE_CONTROL = "public, max-age=60"
 
-const getCartCookieOptions = (isHttps: boolean) => ({
+const getCartCookieOptions = (isHttps: boolean): CookieOptions => ({
   maxAge: 24 * 60 * 60 * 1000, // 24 hours
   httpOnly: true,
   signed: true,
@@ -55,13 +56,13 @@ const getUserAgent = req => req.get("user-agent")
 const fillCartItemWithProductData = (
   products: any[],
   cartItem: {
-    product_id: any
-    image_url: any
-    path: any
-    stock_backorder: any
-    stock_preorder: any
-    variant_id: string | any[]
-    stock_quantity: any
+    product_id: any;
+    image_url: any;
+    path: any;
+    stock_backorder: any;
+    stock_preorder: any;
+    variant_id: string | any[];
+    stock_quantity: any;
   }
 ) => {
   const product = products.find(p => p.id === cartItem.product_id)
@@ -106,8 +107,10 @@ const fillCartItems = cartResponse => {
 }
 
 ajaxRouter.get("/products", (req, res) => {
-  const filter = req.query
-  filter.enabled = true
+  const filter = {
+    ...req.query,
+    enabled: true,
+  }
   api.products
     .list(filter)
     .then(({ status, json }) =>
@@ -247,7 +250,7 @@ ajaxRouter.post("/forgot-password", async (req, res) => {
 
 ajaxRouter.post("/customer-account", async (req, res, next) => {
   let customerData = {
-    token: "",
+    token: {} as any,
     authenticated: false,
     customer_settings: null,
     order_statuses: null
@@ -490,7 +493,7 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
   } catch (erro) {}
 
   // generate password-hash
-  let inputPassword = AuthHeader.decodeUserPassword(customerData.password)
+  let inputPassword = AuthHeader.decodeUserPassword(customerData.password) as any
   let hashPassword = null
   try {
     inputPassword = JSON.stringify(inputPassword.password).replace(/["']/g, "")
@@ -503,7 +506,8 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
     token: "",
     authenticated: false,
     customer_settings: null,
-    order_statuses: null
+    order_statuses: null,
+    loggedin_failed: null
   }
   const customerDraftObj = {
     full_name: `${customerData.first_name} ${customerData.last_name}`,
@@ -527,7 +531,7 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
   try {
     // update customer
     await db.collection("customers").updateMany(
-      { _id: ObjectID(userId) },
+      { _id: new ObjectID(userId) },
       {
         $set: customerDraftObj
       },
@@ -535,7 +539,7 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
       async (error, result) => {
         if (error) {
           // alert
-          res.status("200").send(error)
+          res.status(200).send(error)
         }
         customerDataObj.customer_settings = customerDraftObj
         customerDataObj.customer_settings.password = "*******"
@@ -545,7 +549,7 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
 
         // update orders
         await db.collection("orders").updateMany(
-          { customer_id: ObjectID(userId) },
+          { customer_id: new ObjectID(userId) },
           {
             $set: {
               shipping_address: customerData.shipping_address,
@@ -555,7 +559,7 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
           async (error, result) => {
             if (error) {
               // alert
-              res.status("200").send(error)
+              res.status(200).send(error)
             }
 
             // retrieve customer and orders data
@@ -773,8 +777,8 @@ ajaxRouter.get("/pages/:id", (req, res) => {
 
 ajaxRouter.get("/sitemap", async (req, res) => {
   let result = null
-  const filter = req.query
-  filter.enabled = true
+  // const filter = req.query
+  // filter.enabled = true
 
   const sitemapResponse = await api.sitemap.retrieve(req.query)
   if (sitemapResponse.status !== 404 || sitemapResponse.json) {

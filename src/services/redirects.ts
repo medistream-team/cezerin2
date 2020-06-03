@@ -101,7 +101,7 @@ class RedirectsService {
       return new Error("Required fields are missing")
     }
 
-    const redirect = {}
+    const redirect: any = {}
 
     if (data.from !== undefined) {
       redirect.from = parse.getString(data.from)

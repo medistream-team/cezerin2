@@ -73,7 +73,7 @@ class OrdertDiscountsService {
     return {
       id: new ObjectID(),
       name: parse.getString(data.name),
-      amount: parse.getNumberIfPositive(data.amount),
+      amount: parse.getNumberIfPositive(data.amount) || 0,
     }
   }
 

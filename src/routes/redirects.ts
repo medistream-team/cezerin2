@@ -2,8 +2,7 @@ import security from "../lib/security"
 import RedirectsService from "../services/redirects"
 
 class RedirectsRoute {
-  constructor(router) {
-    this.router = router
+  constructor(public router) {
     this.registerRoutes()
   }
 
@@ -36,7 +35,7 @@ class RedirectsRoute {
   }
 
   getRedirects(req, res, next) {
-    RedirectsService.getRedirects(req.query)
+    RedirectsService.getRedirects()
       .then(data => res.send(data))
       .catch(next)
   }

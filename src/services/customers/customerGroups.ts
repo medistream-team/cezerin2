@@ -61,7 +61,7 @@ class CustomerGroupsService {
   }
 
   getValidDocumentForInsert(data) {
-    const group = {
+    const group: any = {
       date_created: new Date(),
     }
 
@@ -76,7 +76,7 @@ class CustomerGroupsService {
       return new Error("Required fields are missing")
     }
 
-    const group = {
+    const group: any = {
       date_updated: new Date(),
     }
 

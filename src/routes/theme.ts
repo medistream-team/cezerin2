@@ -5,8 +5,7 @@ import ThemeSettingsService from "../services/theme/settings"
 import ThemeService from "../services/theme/theme"
 
 class ThemeRoute {
-  constructor(router) {
-    this.router = router
+  constructor(public router) {
     this.registerRoutes()
   }
 

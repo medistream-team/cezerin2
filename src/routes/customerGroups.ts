@@ -2,8 +2,7 @@ import security from "../lib/security"
 import CustomerGroupsService from "../services/customers/customerGroups"
 
 class CustomerGroupsRoute {
-  constructor(router) {
-    this.router = router
+  constructor(public router) {
     this.registerRoutes()
   }
 

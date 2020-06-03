@@ -5,7 +5,7 @@ import AssetsService from "../services/assets/assets"
 const filesPath = settings.assetServer.filesUploadPath
 
 class FilesRoute {
-  constructor(router) {
+  constructor(public router) {
     this.router = router
     this.registerRoutes()
   }

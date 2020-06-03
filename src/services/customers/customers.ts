@@ -1,12 +1,13 @@
 import { ObjectID } from "mongodb"
 import { db } from "../../lib/mongo"
 import parse from "../../lib/parse"
+import settings from "../../lib/settings"
 import security from "../../lib/security"
 import webhooks from "../../lib/webhooks"
 import CustomerGroupsService from "./customerGroups"
 
 class CustomersService {
-  getFilter(params = {}) {
+  getFilter(params: any = {}) {
     // tag
     // gender
     // date_created_to
@@ -16,7 +17,7 @@ class CustomersService {
     // orders_count_to
     // orders_count_from
 
-    const filter = {}
+    const filter: any = {}
     const id = parse.getObjectIDIfValid(params.id)
     const group_id = parse.getObjectIDIfValid(params.group_id)
 
@@ -43,7 +44,7 @@ class CustomersService {
     return filter
   }
 
-  getCustomers(params = {}) {
+  getCustomers(params: any = {}) {
     const filter = this.getFilter(params)
     const limit = parse.getNumberIfPositive(params.limit) || 1000
     const offset = parse.getNumberIfPositive(params.offset) || 0
@@ -111,6 +112,8 @@ class CustomersService {
     }
     const customerObjectID = new ObjectID(id)
     const customer = this.getValidDocumentForUpdate(id, data)
+
+    if (customer instanceof Error) return;
 
     // is email unique
     if (customer.email && customer.email.length > 0) {
@@ -180,22 +183,21 @@ class CustomersService {
       date_updated: null,
       total_spent: 0,
       orders_count: 0,
+      note: parse.getString(data.note),
+      email: parse.getString(data.email).toLowerCase(),
+      mobile: parse.getString(data.mobile).toLowerCase(),
+      full_name: parse.getString(data.full_name),
+      first_name: parse.getString(data.first_name),
+      last_name: parse.getString(data.last_name),
+      password: parse.getString(data.password),
+      gender: parse.getString(data.gender).toLowerCase(),
+      group_id: parse.getObjectIDIfValid(data.group_id),
+      tags: parse.getArrayIfValid(data.tags) || [],
+      social_accounts: parse.getArrayIfValid(data.social_accounts) || [],
+      birthdate: parse.getDateIfValid(data.birthdate),
+      addresses: this.validateAddresses(data.addresses),
+      browser: parse.getBrowser(data.browser),
     }
-
-    customer.note = parse.getString(data.note)
-    customer.email = parse.getString(data.email).toLowerCase()
-    customer.mobile = parse.getString(data.mobile).toLowerCase()
-    customer.full_name = parse.getString(data.full_name)
-    customer.first_name = parse.getString(data.first_name)
-    customer.last_name = parse.getString(data.last_name)
-    customer.password = parse.getString(data.password)
-    customer.gender = parse.getString(data.gender).toLowerCase()
-    customer.group_id = parse.getObjectIDIfValid(data.group_id)
-    customer.tags = parse.getArrayIfValid(data.tags) || []
-    customer.social_accounts = parse.getArrayIfValid(data.social_accounts) || []
-    customer.birthdate = parse.getDateIfValid(data.birthdate)
-    customer.addresses = this.validateAddresses(data.addresses)
-    customer.browser = parse.getBrowser(data.browser)
 
     return customer
   }
@@ -215,7 +217,7 @@ class CustomersService {
       return new Error("Required fields are missing")
     }
 
-    const customer = {
+    const customer: any = {
       date_updated: new Date(),
     }
 
@@ -521,8 +523,8 @@ class CustomersService {
       // headers: authHeader()
     }
 
-    return fetch(`${security.storeBaseUrl}/users`, requestOptions).then(
-      handleResponse
+    return fetch(`${settings.storeBaseUrl}/users`, requestOptions).then(
+      this.handleResponse
     )
   }
 
@@ -532,7 +534,7 @@ class CustomersService {
       if (!response.ok) {
         if (response.status === 401) {
           // auto logout if 401 response returned from api
-          logout()
+          this.logout()
           location.reload(true)
         }
 

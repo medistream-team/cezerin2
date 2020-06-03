@@ -6,7 +6,7 @@ import ProductsService from "../services/products/products"
 import ProductVariantsService from "../services/products/variants"
 
 class ProductsRoute {
-  constructor(router) {
+  constructor(public router) {
     this.router = router
     this.registerRoutes()
   }
@@ -196,7 +196,7 @@ class ProductsRoute {
   }
 
   async addImage(req, res, next) {
-    await ProductImagesService.addImage(req, res, next)
+    await ProductImagesService.addImage(req, res)
   }
 
   updateImage(req, res, next) {

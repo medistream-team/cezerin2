@@ -19,8 +19,8 @@ const cache = new lruCache({
 const BLACKLIST_CACHE_KEY = "blacklist"
 
 class SecurityTokensService {
-  getTokens(params = {}) {
-    const filter = {
+  getTokens(params: any = {}) {
+    const filter: any = {
       is_revoked: false,
     }
     const id = parse.getObjectIDIfValid(params.id)
@@ -145,7 +145,7 @@ class SecurityTokensService {
   getValidDocumentForInsert(data) {
     const email = parse.getString(data.email)
     return this.checkTokenEmailUnique(email).then(email => {
-      const token = {
+      const token: any = {
         is_revoked: false,
         date_created: new Date(),
       }
@@ -166,7 +166,7 @@ class SecurityTokensService {
       return new Error("Required fields are missing")
     }
 
-    const token = {
+    const token: any = {
       date_updated: new Date(),
     }
 
@@ -193,9 +193,9 @@ class SecurityTokensService {
 
   getSignedToken(token) {
     return new Promise((resolve, reject) => {
-      const jwtOptions = {}
+      const jwtOptions: any = {}
 
-      const payload = {
+      const payload: any = {
         scopes: token.scopes,
         jti: token.id,
       }

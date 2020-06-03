@@ -10,7 +10,7 @@ import CategoriesService from "./productCategories"
 
 class ProductsService {
   async getProducts(
-    params = { fields: {}, limit: {}, offset: {}, params: {} }
+    params: any = { fields: {}, limit: {}, offset: {}, params: {} }
   ) {
     const categories = await CategoriesService.getCategories({
       fields: "parent_id",
@@ -297,6 +297,7 @@ class ProductsService {
     if (sort && sort.length > 0) {
       const fields = sort.split(",")
       return Object.assign(
+        {},
         ...fields.map((field: string) => ({
           [field.startsWith("-") ? field.slice(1) : field]: field.startsWith(
             "-"
@@ -314,7 +315,7 @@ class ProductsService {
     const regularPrice = "$regular_price"
     const costPrice = "$cost_price"
 
-    let project = {
+    let project: any = {
       category_ids: 1,
       related_product_ids: 1,
       enabled: 1,
@@ -443,7 +444,10 @@ class ProductsService {
   }
 
   getProjectFilteredByFields(project, fieldsArray) {
-    return Object.assign(...fieldsArray.map(key => ({ [key]: project[key] })))
+    const filtered: any = {}
+    fieldsArray.forEach(key => filtered[key] = project[key]);
+    return filtered;
+    // return Object.assign(...fieldsArray.map(key => ({ [key]: project[key] })))
   }
 
   getMatchTextQuery({ search }) {
@@ -677,7 +681,7 @@ class ProductsService {
   getValidDocumentForInsert(data) {
     //  Allow empty product to create draft
 
-    const product = {
+    const product: any = {
       date_created: new Date(),
       date_updated: null,
       images: [],
@@ -773,7 +777,7 @@ class ProductsService {
       throw new Error("Required fields are missing")
     }
 
-    const product = {
+    const product: any = {
       date_updated: new Date(),
     }
 
@@ -1011,7 +1015,7 @@ class ProductsService {
   }
 
   isSkuExists(sku, productId) {
-    const filter = {
+    const filter: any = {
       sku,
     }
 
@@ -1025,11 +1029,11 @@ class ProductsService {
       .then(count => count > 0)
   }
 
-  setAvailableSku(product, productId) {
+  setAvailableSku(product, productId = undefined) {
     // SKU can be empty
     if (product.sku && product.sku.length > 0) {
       let newSku = product.sku
-      const filter = {}
+      const filter: any = {}
       if (productId && ObjectID.isValid(productId)) {
         filter._id = { $ne: new ObjectID(productId) }
       }
@@ -1051,7 +1055,7 @@ class ProductsService {
   }
 
   isSlugExists(slug, productId) {
-    const filter = {
+    const filter: any = {
       slug: utils.cleanSlug(slug),
     }
 
@@ -1065,10 +1069,10 @@ class ProductsService {
       .then(count => count > 0)
   }
 
-  setAvailableSlug(product, productId) {
+  setAvailableSlug(product, productId = undefined) {
     if (product.slug && product.slug.length > 0) {
       let newSlug = utils.cleanSlug(product.slug)
-      const filter = {}
+      const filter: any = {}
       if (productId && ObjectID.isValid(productId)) {
         filter._id = { $ne: new ObjectID(productId) }
       }

@@ -41,7 +41,7 @@ class CheckoutFieldsService {
       return new Error("Required fields are missing")
     }
 
-    const field = {}
+    const field: any = {}
 
     if (data.status !== undefined) {
       field.status = parse.getString(data.status)

@@ -65,7 +65,7 @@ class ThemePlaceholdersService {
     return field
   }
 
-  getValidDocumentForInsert(data) {
+  getValidDocumentForInsert(data): any {
     if (Object.keys(data).length === 0) {
       return new Error("Required fields are missing")
     }

@@ -2,8 +2,7 @@ import security from "../lib/security"
 import ShippingMethodsService from "../services/orders/shippingMethods"
 
 class ShippingMethodsRoute {
-  constructor(router) {
-    this.router = router
+  constructor(public router) {
     this.registerRoutes()
   }
 

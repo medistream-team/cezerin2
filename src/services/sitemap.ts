@@ -2,7 +2,7 @@ import { db } from "../lib/mongo"
 import parse from "../lib/parse"
 
 class SitemapService {
-  getPaths(onlyEnabled) {
+  getPaths(onlyEnabled?) {
     const slug = null
     onlyEnabled = parse.getBooleanIfValid(onlyEnabled, false)
 
@@ -71,8 +71,8 @@ class SitemapService {
   }
 
   getSlugArrayFromProducts(slug, onlyEnabled) {
-    const categoriesFilter = {}
-    const productFilter = {}
+    const categoriesFilter: any = {}
+    const productFilter: any = {}
 
     if (slug) {
       const slugParts = slug.split("/")
@@ -150,7 +150,7 @@ class SitemapService {
       )
   }
 
-  getFilterWithoutSlashes(slug) {
+  getFilterWithoutSlashes(slug): any {
     if (slug) {
       return { slug }
     }

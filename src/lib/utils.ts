@@ -9,7 +9,7 @@ const slugConfig = {
 
 const cleanSlug = text => slug(text || "", slugConfig)
 
-const getAvailableSlug = (path, resource, enableCleanPath = true) =>
+const getAvailableSlug = (path, resource = undefined, enableCleanPath: boolean = true) =>
   SitemapService.getPaths().then(paths => {
     if (enableCleanPath) {
       path = cleanSlug(path)

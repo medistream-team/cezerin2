@@ -7,8 +7,7 @@ import OrdersService from "../services/orders/orders"
 import OrdertTansactionsService from "../services/orders/orderTransactions"
 
 class OrdersRoute {
-  constructor(router) {
-    this.router = router
+  constructor(public router) {
     this.registerRoutes()
   }
 

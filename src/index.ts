@@ -14,6 +14,7 @@ import logger from "./lib/logger"
 import security from "./lib/security"
 import settings from "./lib/settings"
 const app = express()
+import { AddressInfo } from 'net'
 
 const STATIC_OPTIONS = {
   maxAge: 31536000000, // One year
@@ -38,7 +39,7 @@ app.all("*", (req, res, next) => {
   const { origin } = req.headers
   if (allowedOrigins === "*") {
     res.setHeader("Access-Control-Allow-Origin", allowedOrigins)
-  } else if (allowedOrigins.indexOf(origin) > -1) {
+  } else if (allowedOrigins.indexOf(origin as string) > -1) {
     res.setHeader("Access-Control-Allow-Origin", origin)
   }
 
@@ -70,7 +71,7 @@ app.listen({ port: 4000 }, () =>
 )
 // end of graphql
 const server = app.listen(settings.apiListenPort, () => {
-  const serverAddress = server.address()
+  const serverAddress = server.address() as AddressInfo
   winston.info(`API running at http://localhost:${serverAddress.port}`)
 })
 
