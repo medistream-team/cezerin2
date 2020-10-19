@@ -363,11 +363,27 @@ class ProductsService {
       variable: {
         $gt: [
           {
-            $size: { $ifNull: ["$variants", []] },
+            $size: {
+              $cond: {
+                if: {
+                  $eq: [{ $type: "$variants" }, "missing"],
+                },
+                then: [],
+                else: "$variants",
+              },
+            },
           },
           0,
         ],
       },
+      // variable: {
+      //   $gt: [
+      //     {
+      //       $size: { $ifNull: ["$variants", []] },
+      //     },
+      //     0,
+      //   ],
+      // },
       price: {
         $cond: {
           if: {
@@ -445,8 +461,8 @@ class ProductsService {
 
   getProjectFilteredByFields(project, fieldsArray) {
     const filtered: any = {}
-    fieldsArray.forEach(key => filtered[key] = project[key]);
-    return filtered;
+    fieldsArray.forEach(key => (filtered[key] = project[key]))
+    return filtered
     // return Object.assign(...fieldsArray.map(key => ({ [key]: project[key] })))
   }
 
