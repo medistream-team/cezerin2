@@ -436,10 +436,14 @@ class ProductsService {
           },
         },
       },
-      url: { $literal: "" },
-      path: { $literal: "" },
-      category_name: { $literal: "" },
-      category_slug: { $literal: "" },
+      url: "",
+      path: "",
+      category_name: "",
+      category_slug: "",
+      // url: { $literal: "" },
+      // path: { $literal: "" },
+      // category_name: { $literal: "" },
+      // category_slug: { $literal: "" },
     }
 
     if (fieldsArray && fieldsArray.length > 0) {
