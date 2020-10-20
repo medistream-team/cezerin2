@@ -478,7 +478,8 @@ class ProductsService {
       search !== "undefined"
     ) {
       return {
-        $or: [{ sku: new RegExp(search, "i") }, { $text: { $search: search } }],
+        // $or: [{ sku: new RegExp(search, "i") }, { $text: { $search: search } }],
+        $or: [{ sku: new RegExp(search, "i") }, { $regex: search }],
       }
     }
     return null

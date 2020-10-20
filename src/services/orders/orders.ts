@@ -133,7 +133,8 @@ class OrdersService {
       alternativeSearch.push({ password: new RegExp(params.search, "i") })
       alternativeSearch.push({ email: new RegExp(params.search, "i") })
       alternativeSearch.push({ mobile: new RegExp(params.search, "i") })
-      alternativeSearch.push({ $text: { $search: params.search } })
+      // alternativeSearch.push({ $text: { $search: params.search } })
+      alternativeSearch.push({ $regex: params.search })
 
       filter.$or = alternativeSearch
     }

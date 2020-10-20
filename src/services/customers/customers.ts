@@ -37,7 +37,8 @@ class CustomersService {
       filter.$or = [
         { email: new RegExp(params.search, "i") },
         { mobile: new RegExp(params.search, "i") },
-        { $text: { $search: params.search } },
+        { $regex: params.search },
+        // { $text: { $search: params.search } },
       ]
     }
 
@@ -113,7 +114,7 @@ class CustomersService {
     const customerObjectID = new ObjectID(id)
     const customer = this.getValidDocumentForUpdate(id, data)
 
-    if (customer instanceof Error) return;
+    if (customer instanceof Error) return
 
     // is email unique
     if (customer.email && customer.email.length > 0) {
