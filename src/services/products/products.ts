@@ -479,7 +479,10 @@ class ProductsService {
     ) {
       return {
         // $or: [{ sku: new RegExp(search, "i") }, { $text: { $search: search } }],
-        $or: [{ sku: new RegExp(search, "i") }, { $regex: search }],
+        $or: [
+          { sku: new RegExp(search, "i") },
+          { name: new RegExp(search, "i") },
+        ],
       }
     }
     return null

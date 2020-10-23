@@ -37,7 +37,9 @@ class CustomersService {
       filter.$or = [
         { email: new RegExp(params.search, "i") },
         { mobile: new RegExp(params.search, "i") },
-        { $regex: params.search },
+        { "address.address1": new RegExp(params.search, "i") },
+        { full_name: new RegExp(params.search, "i") },
+        // { $regex: params.search },
         // { $text: { $search: params.search } },
       ]
     }
