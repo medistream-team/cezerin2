@@ -34,6 +34,7 @@ class CustomersService {
     }
 
     if (params.search) {
+      console.log("==>", params.search)
       filter.$or = [
         { email: new RegExp(params.search, "i") },
         { mobile: new RegExp(params.search, "i") },
