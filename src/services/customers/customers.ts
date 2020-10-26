@@ -5,7 +5,7 @@ import settings from "../../lib/settings"
 import security from "../../lib/security"
 import webhooks from "../../lib/webhooks"
 import CustomerGroupsService from "./customerGroups"
-
+import winston from "winston"
 class CustomersService {
   getFilter(params: any = {}) {
     // tag
@@ -35,6 +35,7 @@ class CustomersService {
 
     if (params.search) {
       console.log("==>", params.search)
+      winston.info(`--> ${params.search}`)
       filter.$or = [
         { email: new RegExp(params.search, "i") },
         { mobile: new RegExp(params.search, "i") },
@@ -44,7 +45,8 @@ class CustomersService {
         // { $text: { $search: params.search } },
       ]
     }
-    console.log(filter)
+    winston.info(`customer filter :: ${filter}`)
+    console.log()
 
     return filter
   }
