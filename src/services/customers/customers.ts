@@ -44,6 +44,7 @@ class CustomersService {
         // { $text: { $search: params.search } },
       ]
     }
+    console.log(filter)
 
     return filter
   }
