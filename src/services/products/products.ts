@@ -292,7 +292,9 @@ class ProductsService {
     const isSearchUsed =
       search && search.length > 0 && search !== "null" && search !== "undefined"
     if (sort === "search" && isSearchUsed) {
-      return { score: { $meta: "textScore" } }
+      // return { score: { $meta: "textScore" } }
+      // 텍스트 서치가 지원되지 않으므로 포기
+      return null
     }
     if (sort && sort.length > 0) {
       const fields = sort.split(",")
