@@ -725,7 +725,7 @@ class ProductsService {
       attenabledributes: {},
       enabled: {},
       discontinued: {},
-      slug: { length },
+      // slug: { length },
       sku: {},
       code: {},
       tax_class: {},
