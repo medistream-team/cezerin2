@@ -281,8 +281,8 @@ class OrdersService {
   }
 
   async deleteOrder(orderId) {
-    console.error("deleteOrder refused: " + orderId)
-    return Promise.reject("deleteOrder refused: " + orderId)
+    console.error(">>> deleteOrder refused: " + orderId)
+    // return Promise.reject("deleteOrder refused: " + orderId)
     if (!ObjectID.isValid(orderId)) {
       return Promise.reject("Invalid identifier")
     }
