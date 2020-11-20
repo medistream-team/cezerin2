@@ -14,7 +14,7 @@ import logger from "./lib/logger"
 import security from "./lib/security"
 import settings from "./lib/settings"
 const app = express()
-import { AddressInfo } from 'net'
+import { AddressInfo } from "net"
 
 const STATIC_OPTIONS = {
   maxAge: 31536000000, // One year
@@ -37,6 +37,7 @@ app.all("*", (req, res, next) => {
   // CORS headers
   const allowedOrigins = security.getAccessControlAllowOrigin()
   const { origin } = req.headers
+
   if (allowedOrigins === "*") {
     res.setHeader("Access-Control-Allow-Origin", allowedOrigins)
   } else if (allowedOrigins.indexOf(origin as string) > -1) {
@@ -66,9 +67,11 @@ const graphServer = new ApolloServer({ typeDefs, resolvers })
 
 graphServer.applyMiddleware({ app })
 
-app.listen({ port: 4000 }, () =>
+app.listen({ port: 4000 }, () => {
   console.log("Now browse to http://localhost:4000" + graphServer.graphqlPath)
-)
+  const allowedOrigins = security.getAccessControlAllowOrigin()
+  winston.info(`Allowed Origins [CORS] ${allowedOrigins}`)
+})
 // end of graphql
 const server = app.listen(settings.apiListenPort, () => {
   const serverAddress = server.address() as AddressInfo

@@ -292,7 +292,9 @@ class ProductsService {
     const isSearchUsed =
       search && search.length > 0 && search !== "null" && search !== "undefined"
     if (sort === "search" && isSearchUsed) {
-      return { score: { $meta: "textScore" } }
+      // return { score: { $meta: "textScore" } }
+      // 텍스트 서치가 지원되지 않으므로 포기
+      return null
     }
     if (sort && sort.length > 0) {
       const fields = sort.split(",")
@@ -363,11 +365,27 @@ class ProductsService {
       variable: {
         $gt: [
           {
-            $size: { $ifNull: ["$variants", []] },
+            $size: {
+              $cond: {
+                if: {
+                  $eq: [{ $type: "$variants" }, "missing"],
+                },
+                then: [],
+                else: "$variants",
+              },
+            },
           },
           0,
         ],
       },
+      // variable: {
+      //   $gt: [
+      //     {
+      //       $size: { $ifNull: ["$variants", []] },
+      //     },
+      //     0,
+      //   ],
+      // },
       price: {
         $cond: {
           if: {
@@ -420,10 +438,14 @@ class ProductsService {
           },
         },
       },
-      url: { $literal: "" },
-      path: { $literal: "" },
-      category_name: { $literal: "" },
-      category_slug: { $literal: "" },
+      url: "",
+      path: "",
+      category_name: "",
+      category_slug: "",
+      // url: { $literal: "" },
+      // path: { $literal: "" },
+      // category_name: { $literal: "" },
+      // category_slug: { $literal: "" },
     }
 
     if (fieldsArray && fieldsArray.length > 0) {
@@ -445,8 +467,8 @@ class ProductsService {
 
   getProjectFilteredByFields(project, fieldsArray) {
     const filtered: any = {}
-    fieldsArray.forEach(key => filtered[key] = project[key]);
-    return filtered;
+    fieldsArray.forEach(key => (filtered[key] = project[key]))
+    return filtered
     // return Object.assign(...fieldsArray.map(key => ({ [key]: project[key] })))
   }
 
@@ -458,7 +480,11 @@ class ProductsService {
       search !== "undefined"
     ) {
       return {
-        $or: [{ sku: new RegExp(search, "i") }, { $text: { $search: search } }],
+        // $or: [{ sku: new RegExp(search, "i") }, { $text: { $search: search } }],
+        $or: [
+          { sku: new RegExp(search, "i") },
+          { name: new RegExp(search, "i") },
+        ],
       }
     }
     return null
@@ -660,6 +686,8 @@ class ProductsService {
   }
 
   deleteProduct(productId) {
+    console.error(">>> deleteProduct refused " + productId)
+    // return Promise.reject("deleteProduct refused " + productId)
     if (!ObjectID.isValid(productId)) {
       return Promise.reject("Invalid identifier")
     }
@@ -699,7 +727,7 @@ class ProductsService {
       attenabledributes: {},
       enabled: {},
       discontinued: {},
-      slug: { length },
+      // slug: { length },
       sku: {},
       code: {},
       tax_class: {},

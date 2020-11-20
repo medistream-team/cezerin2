@@ -5,7 +5,7 @@ import settings from "../../lib/settings"
 import security from "../../lib/security"
 import webhooks from "../../lib/webhooks"
 import CustomerGroupsService from "./customerGroups"
-
+import winston from "winston"
 class CustomersService {
   getFilter(params: any = {}) {
     // tag
@@ -34,12 +34,19 @@ class CustomersService {
     }
 
     if (params.search) {
+      console.log("==>", params.search)
+      winston.info(`--> ${params.search}`)
       filter.$or = [
         { email: new RegExp(params.search, "i") },
         { mobile: new RegExp(params.search, "i") },
-        { $text: { $search: params.search } },
+        { "address.address1": new RegExp(params.search, "i") },
+        { full_name: new RegExp(params.search, "i") },
+        // { $regex: params.search },
+        // { $text: { $search: params.search } },
       ]
     }
+    winston.info(`customer filter :: ${filter}`)
+    console.log()
 
     return filter
   }
@@ -113,7 +120,7 @@ class CustomersService {
     const customerObjectID = new ObjectID(id)
     const customer = this.getValidDocumentForUpdate(id, data)
 
-    if (customer instanceof Error) return;
+    if (customer instanceof Error) return
 
     // is email unique
     if (customer.email && customer.email.length > 0) {
