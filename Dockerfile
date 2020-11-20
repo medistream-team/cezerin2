@@ -79,4 +79,4 @@ RUN cd /var/www/cezerin2 \
 
 EXPOSE 3001
 
-CMD ["pm2-runtime", "start", "./build/index.js"]
+CMD ["pm2-runtime", "start", "process.json"]
