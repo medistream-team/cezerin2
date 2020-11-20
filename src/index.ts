@@ -2,17 +2,18 @@ import { ApolloServer } from "apollo-server-express"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import express from "express"
+import morgan from "morgan"
 import helmet from "helmet"
 import responseTime from "response-time"
-import winston from "winston"
 import ajaxRouter from "./ajaxRouter"
 import apiRouter from "./apiRouter"
 import resolvers from "./graphql/resolvers/index"
 import typeDefs from "./graphql/typeDefs/index"
 import dashboardWebSocket from "./lib/dashboardWebSocket"
-import logger from "./lib/logger"
+import { logger, sendResponse, stream } from "./lib/logger"
 import security from "./lib/security"
 import settings from "./lib/settings"
+
 const app = express()
 import { AddressInfo } from "net"
 
@@ -22,6 +23,8 @@ const STATIC_OPTIONS = {
 
 app.set("trust proxy", 1)
 app.use(helmet())
+
+app.use(morgan('combined', {stream}))
 
 app.get("/images/:entity/:id/:size/:filename", (req, res, next) => {
   // A stub of image resizing (can be done with Nginx)
@@ -59,7 +62,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use("/ajax", ajaxRouter)
 app.use("/api", apiRouter)
-app.use(logger.sendResponse)
+app.use(sendResponse)
 
 //  graphql
 
@@ -70,12 +73,12 @@ graphServer.applyMiddleware({ app })
 app.listen({ port: 4000 }, () => {
   console.log("Now browse to http://localhost:4000" + graphServer.graphqlPath)
   const allowedOrigins = security.getAccessControlAllowOrigin()
-  winston.info(`Allowed Origins [CORS] ${allowedOrigins}`)
+  logger.info(`Allowed Origins [CORS] ${allowedOrigins}`)
 })
 // end of graphql
 const server = app.listen(settings.apiListenPort, () => {
   const serverAddress = server.address() as AddressInfo
-  winston.info(`API running at http://localhost:${serverAddress.port}`)
+  logger.info(`API running at http://localhost:${serverAddress.port}`)
 })
 
 dashboardWebSocket.listen(server)

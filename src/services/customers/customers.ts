@@ -4,8 +4,9 @@ import parse from "../../lib/parse"
 import settings from "../../lib/settings"
 import security from "../../lib/security"
 import webhooks from "../../lib/webhooks"
+import { logger } from "../../lib/logger"
 import CustomerGroupsService from "./customerGroups"
-import winston from "winston"
+
 class CustomersService {
   getFilter(params: any = {}) {
     // tag
@@ -35,7 +36,7 @@ class CustomersService {
 
     if (params.search) {
       console.log("==>", params.search)
-      winston.info(`--> ${params.search}`)
+      logger.info(`--> ${params.search}`)
       filter.$or = [
         { email: new RegExp(params.search, "i") },
         { mobile: new RegExp(params.search, "i") },
@@ -45,8 +46,7 @@ class CustomersService {
         // { $text: { $search: params.search } },
       ]
     }
-    winston.info(`customer filter :: ${filter}`)
-    console.log()
+    logger.info(`customer filter :: %o`, filter)
 
     return filter
   }
@@ -97,7 +97,7 @@ class CustomersService {
         .collection("customers")
         .count({ email: customer.email })
       if (customerCount > 0) {
-        return Promise.reject("Customer email must be unique")
+        return Promise.reject("(Add) Customer email must be unique")
       }
     }
 
@@ -132,7 +132,7 @@ class CustomersService {
       })
 
       if (customerCount > 0) {
-        return Promise.reject("Customer email must be unique")
+        return Promise.reject("(Update) Customer email must be unique")
       }
     }
 

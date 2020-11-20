@@ -1,9 +1,9 @@
 import { exec } from "child_process"
 import formidable from "formidable"
 import path from "path"
-import winston from "winston"
 import dashboardWebSocket from "../../lib/dashboardWebSocket"
 import settings from "../../lib/settings"
+import { logger } from "../../lib/logger"
 
 class ThemesService {
   exportTheme(req, res) {
@@ -12,10 +12,10 @@ class ThemesService {
       `npm --silent run theme:export -- ${randomFileName}.zip`,
       (error, stdout, stderr) => {
         if (error) {
-          winston.error("Exporting theme failed")
+          logger.error("Exporting theme failed")
           res.status(500).send(this.getErrorMessage(error))
         } else {
-          winston.info(`Theme successfully exported to ${randomFileName}.zip`)
+          logger.info(`Theme successfully exported to ${randomFileName}.zip`)
           if (stdout.includes("success")) {
             res.send({ file: `/${randomFileName}.zip` })
           } else {
@@ -34,7 +34,7 @@ class ThemesService {
         res.status(500).send(this.getErrorMessage(err))
       } else {
         // run async NPM script
-        winston.info("Installing theme...")
+        logger.info("Installing theme...")
         exec(`npm run theme:install ${fileName}`, (error, stdout, stderr) => {
           dashboardWebSocket.send({
             event: dashboardWebSocket.events.THEME_INSTALLED,
@@ -42,9 +42,9 @@ class ThemesService {
           })
 
           if (error) {
-            winston.error("Installing theme failed")
+            logger.error("Installing theme failed")
           } else {
-            winston.info("Theme successfully installed")
+            logger.info("Theme successfully installed")
           }
         })
         // close request and don't wait result from NPM script

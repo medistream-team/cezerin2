@@ -1,24 +1,72 @@
 import winston from "winston"
-const LOGS_FILE = "logs/server.log"
+import winstonDaily from "winston-daily-rotate-file"
 
-winston.configure({
-  transports: [
-    new winston.transports.Console({
-      level: "debug",
-      handleExceptions: true,
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple()
-      ),
+const {createLogger, format, transports} = winston;
+const { combine, timestamp, printf } = format
+
+const logDir = 'logs' 
+let logFile = 'dev'
+if (process.env.NODE_ENV === 'staging') logFile = 'stg'
+if (process.env.NODE_ENV === 'production') logFile = 'prd'
+// NODE_ENV 가 development => dev-log-%DATE%.log, dev-access-%DATE%.log 
+
+const accessLogger = createLogger({
+  format: combine(
+    timestamp({
+      format: 'YYYY-MM-DD HH:mm:ss',
     }),
-    new winston.transports.File({
+    format.json(),
+    format.prettyPrint(),
+    format.colorize(),
+    format.splat(),
+  ),
+  transports: [
+  new winstonDaily({
+    level: 'info',
+    datePattern: 'YYYY-MM-DD',
+    dirname: logDir + '/access',
+    filename: `${logFile}-access-%DATE%.log`,
+    // maxFiles: 30,
+    zippedArchive: true,
+  })]
+})
+
+const logger = createLogger({
+  format: combine(
+    timestamp({
+      format: 'YYYY-MM-DD HH:mm:ss',
+    }),
+    format.json(),
+    format.prettyPrint(),
+    format.colorize(),
+    format.splat(),
+  ),
+  transports: [
+    new transports.Console({
       level: "info",
       handleExceptions: true,
-      format: winston.format.json(),
-      filename: LOGS_FILE,
     }),
+    // info 레벨 로그를 저장할 파일 설정
+    new winstonDaily({
+      level: 'info',
+      datePattern: 'YYYY-MM-DD',
+      dirname: logDir,
+      filename: `${logFile}-log-%DATE%.log`,
+      maxFiles: 30, // 30일치 로그 파일 저장
+      zippedArchive: true,
+    }),
+    // error 레벨 로그를 저장할 파일 설정
+    new winstonDaily({
+      level: 'error',
+      datePattern: 'YYYY-MM-DD',
+      dirname: logDir + '/error', // error.log 파일은 /logs/error 하위에 저장
+      filename: `${logFile}-log-%DATE%.error.log`,
+      maxFiles: 30,
+      zippedArchive: true,
+    })
   ],
-})
+  exitOnError: false 
+});
 
 const getResponse = message => ({
   error: true,
@@ -34,13 +82,19 @@ const sendResponse = (err, req, res, next) => {
     logUnauthorizedRequests(req)
     res.status(401).send(getResponse(err.message))
   } else if (err) {
-    winston.error(err.stack)
+    logger.error(err)
     res.status(500).send(getResponse(err.message))
   } else {
     next()
   }
 }
 
-export default {
-  sendResponse,
+const stream = {
+  write: message => {
+    accessLogger.info(message)
+  }
+}
+
+export {
+  logger, sendResponse, stream
 }
