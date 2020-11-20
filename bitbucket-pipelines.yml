@@ -19,7 +19,7 @@ pipelines:
             - IMAGE=$AWS_ECR_REPOSITORY/cezerin-api
             - echo "$BITBUCKET_BRANCH" "$BITBUCKET_TAG"
             - TAG=$BITBUCKET_TAG
-            - docker build -t $IMAGE:$TAG . -v log-data
+            - docker build -t $IMAGE:$TAG 
               --build-arg nodeEnv=$NODE_ENV 
               --build-arg storeBaseUrl=$STORE_BASE_URL 
               --build-arg adminBaseUrl=$ADMIN_BASE_URL  
@@ -54,7 +54,7 @@ pipelines:
             - IMAGE=$AWS_ECR_REPOSITORY/cezerin-api
             - echo "$BITBUCKET_BRANCH" "$BITBUCKET_TAG"
             - TAG=$BITBUCKET_TAG
-            - docker build -t $IMAGE:$TAG . -v log-data
+            - docker build -t $IMAGE:$TAG 
               --build-arg nodeEnv=$NODE_ENV 
               --build-arg storeBaseUrl=$STORE_BASE_URL 
               --build-arg adminBaseUrl=$ADMIN_BASE_URL  
