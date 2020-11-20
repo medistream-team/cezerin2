@@ -72,7 +72,7 @@ ADD . /var/www/cezerin2
 #COPY . /var/www/cezerin2/
 WORKDIR /var/www/cezerin2
 
-COPY ecosystem.config.js /usr/local/bin/
+# COPY ecosystem.config.js /usr/local/bin/
 
 RUN cd /var/www/cezerin2 \
         && yarn && yarn compile
