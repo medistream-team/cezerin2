@@ -1,41 +1,82 @@
-FROM node
+FROM node:12-alpine
 
-ENV NGINX_CODENAME stretch
-ENV API_PORT 3001
+ARG nodeEnv=development
+ENV NODE_ENV=$nodeEnv
 
-# install requirements
-RUN echo "deb http://nginx.org/packages/debian/ ${NGINX_CODENAME} nginx" >> /etc/apt/sources.list \
-	&& apt-get update && apt-get install --no-install-recommends --no-install-suggests -y --assume-yes --allow-unauthenticated \
-	gettext-base\
-	bash \		
-	zip \
-	unzip \
-	wget \
-	curl \
-	nano \
-	ca-certificates \
-	nginx \
-	nginx-module-image-filter
+ARG storeBaseUrl=http://localhost:3000
+ENV STORE_BASE_URL=$storeBaseUrl
+
+ARG adminBaseUrl=http://localhost:3002
+ENV ADMIN_BASE_URL=$adminBaseUrl
+
+ARG apiBaseUrl=http://localhost:3001/api/v1
+ENV API_BASE_URL=$apiBaseUrl
+
+ARG apiWebSocketUrl=wss://market-api.stg.medistream.co.kr
+ENV API_WEB_SOCKET_URL=$apiWebSocketUrl
+
+ARG assetsType=local
+ENV ASSETS_TYPE=$assetsType
+
+ARG assetsBaseUrl=http://localhost:3001
+ENV ASSETS_BASE_URL=$assetsBaseUrl
+
+ARG dbHost=127.0.0.1
+ENV DB_HOST=$dbHost
+
+ARG dbPort=27017
+ENV DB_PORT=$dbPort
+
+ARG dbName=market
+ENV DB_NAME=$dbName
+
+ARG dbUser=medistream
+ENV DB_USER=$dbUser
+
+ARG dbPass=medistream
+ENV DB_PASS=$dbPass
+
+ARG smtpHost=smtp
+ENV SMTP_HOST=$smtpHost
+
+ARG smtpPort=587
+ENV SMTP_PORT=$smtpPort
+
+ARG smtpSecure=false
+ENV SMTP_SECURE=$smtpSecure
+
+ARG smtpUser=smtp
+ENV SMTP_USER=$smtpUser
+
+ARG smtpPass=smtp
+ENV SMTP_PASS=$smtpPass
+
+ARG smtpFromName=smtp
+ENV SMTP_FROM_NAME=$smtpFromName
+
+ARG smtpFromAddress=smtp
+ENV SMTP_FROM_ADDRESS=$smtpFromAddress
+
+ARG jwtSecretKey=jwt
+ENV JWT_SECRET_KEY=$jwtSecretKey
+
+ARG cookieSecretKey=cookie
+ENV COOKIE_SECRET_KEY=$cookieSecretKey
 
 # install PM2
-RUN yarn global add pm2
+RUN npm -g install pm2
 
+RUN mkdir -p /var/www/cezerin2
 # download project
 ADD . /var/www/cezerin2
+#COPY . /var/www/cezerin2/
+WORKDIR /var/www/cezerin2
 
-# Nginx config
-COPY nginx/nginx.conf /etc/nginx/
-COPY nginx/default.conf.template /etc/nginx/conf.d/
+COPY ecosystem.config.js /usr/local/bin/
 
-# script to run Nginx and PM2
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x "/usr/local/bin/docker-entrypoint.sh"
-
-# build project
 RUN cd /var/www/cezerin2 \
-	&& yarn
+        && yarn && yarn compile
 
-EXPOSE 80
+EXPOSE 3001
 
-# start PM2
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["pm2-runtime", "start", "./build/index.js"]
