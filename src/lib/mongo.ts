@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb"
 import url from "url"
 import winston from "winston"
+import { logger } from "./logger"
 import settings from "./settings"
 
 const mongodbConnection = settings.mongodbServerUrl
@@ -15,11 +16,11 @@ const CONNECT_OPTIONS = {
 }
 
 const onClose = () => {
-  winston.info("MongoDB connection was closed")
+  logger.info("MongoDB connection was closed")
 }
 
 const onReconnect = () => {
-  winston.info("MongoDB reconnected")
+  logger.info("MongoDB reconnected")
 }
 
 export let db = null
@@ -27,7 +28,7 @@ export let db = null
 const connectWithRetry = () => {
   MongoClient.connect(mongodbConnection, CONNECT_OPTIONS, (err, client) => {
     if (err) {
-      winston.error(
+      logger.error(
         `MongoDB connection was failed: ${err.message}`,
         err.message
       )
@@ -36,7 +37,7 @@ const connectWithRetry = () => {
       db = client.db(dbName)
       db.on("close", onClose)
       db.on("reconnect", onReconnect)
-      winston.info("MongoDB connected successfully")
+      logger.info("MongoDB connected successfully")
     }
   })
 }

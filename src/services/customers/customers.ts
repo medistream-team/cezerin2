@@ -46,7 +46,7 @@ class CustomersService {
         // { $text: { $search: params.search } },
       ]
     }
-    logger.info(`customer filter :: %o`, filter)
+    logger.info(`customer filter :`, filter)
 
     return filter
   }
@@ -115,6 +115,7 @@ class CustomersService {
 
   async updateCustomer(id, data) {
     if (!ObjectID.isValid(id)) {
+      
       return Promise.reject("Invalid identifier")
     }
     const customerObjectID = new ObjectID(id)

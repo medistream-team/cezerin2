@@ -1,5 +1,6 @@
 import { ObjectID } from "mongodb"
 import url from "url"
+import { logger } from "../../lib/logger"
 import { db } from "../../lib/mongo"
 import parse from "../../lib/parse"
 import settings from "../../lib/settings"
@@ -686,7 +687,7 @@ class ProductsService {
   }
 
   deleteProduct(productId) {
-    console.error(">>> deleteProduct refused " + productId)
+    logger.error(">>> deleteProduct refused " + productId)
     // return Promise.reject("deleteProduct refused " + productId)
     if (!ObjectID.isValid(productId)) {
       return Promise.reject("Invalid identifier")

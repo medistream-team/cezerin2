@@ -1,6 +1,7 @@
 import fs from "fs"
 import formidable from "formidable"
 import pathModule from "path"
+import { logger } from "../../lib/logger"
 import utils from "../../lib/utils"
 import settings from "../../lib/settings"
 
@@ -121,6 +122,7 @@ class MinioService {
           bucket,
           objectsList.map(obj => [obj.prefix, obj.name].join("/")),
           err => {
+            logger.log(err)
             console.log(err)
           }
         )

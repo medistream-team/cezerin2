@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt"
 import handlebars from "handlebars"
 import { ObjectID } from "mongodb"
+import { logger } from "../../lib/logger"
 import dashboardWebSocket from "../../lib/dashboardWebSocket"
 import mailer from "../../lib/mailer"
 import { db } from "../../lib/mongo"
@@ -281,7 +282,8 @@ class OrdersService {
   }
 
   async deleteOrder(orderId) {
-    console.error(">>> deleteOrder refused: " + orderId)
+    logger.error(">>> deleteOrder refused: " + orderId)
+    // console.error(">>> deleteOrder refused: " + orderId)
     // return Promise.reject("deleteOrder refused: " + orderId)
     if (!ObjectID.isValid(orderId)) {
       return Promise.reject("Invalid identifier")

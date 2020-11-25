@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb"
 import url from "url"
-import winston from "winston"
+import { logger } from "./lib/logger"
 import settings from "./lib/settings"
 
 const mongodbConnection = settings.mongodbServerUrl
@@ -20,7 +20,7 @@ const addPage = async (db, pageObject) => {
   const docExists = +count > 0
   if (!docExists) {
     await db.collection("pages").insertOne(pageObject)
-    winston.info(`- Added page: /${pageObject.slug}`)
+    logger.info(`- Added page: /${pageObject.slug}`)
   }
 }
 
@@ -167,7 +167,7 @@ const addAllProducts = async db => {
       ],
     })
 
-    winston.info("- Added products")
+    logger.info("- Added products")
   }
 }
 
@@ -233,7 +233,7 @@ const addOrderConfirmationEmailTemplates = async db => {
 		  </div>`,
     })
 
-    winston.info("- Added email template for Order Confirmation")
+    logger.info("- Added email template for Order Confirmation")
   }
 }
 
@@ -255,7 +255,7 @@ const addForgotPasswordEmailTemplates_en = async db => {
 		  </div>`,
     })
 
-    winston.info("- Added email template for Password Reset English")
+    logger.info("- Added email template for Password Reset English")
   }
 }
 
@@ -277,7 +277,7 @@ const addForgotPasswordEmailTemplates_ru = async db => {
 		  </div>`,
     })
 
-    winston.info("- Added email template for Password Reset Russian")
+    logger.info("- Added email template for Password Reset Russian")
   }
 }
 
@@ -304,7 +304,7 @@ const addForgotPasswordEmailTemplates_de = async db => {
 		  </div>`,
     })
 
-    winston.info("- Added email template for Password Reset German")
+    logger.info("- Added email template for Password Reset German")
   }
 }
 
@@ -333,7 +333,7 @@ const addRegisterDoiEmailTemplates_en = async db => {
 		  </div>`,
     })
 
-    winston.info("- Added email template for Account Activation English")
+    logger.info("- Added email template for Account Activation English")
   }
 }
 
@@ -358,7 +358,7 @@ const addRegisterDoiEmailTemplates_ru = async db => {
 		  </div>`,
     })
 
-    winston.info("- Added email template for Account Activation Russian")
+    logger.info("- Added email template for Account Activation Russian")
   }
 }
 
@@ -386,7 +386,7 @@ const addRegisterDoiEmailTemplates_de = async db => {
 		  </div>`,
     })
 
-    winston.info("- Added email template for Account Activation German")
+    logger.info("- Added email template for Account Activation German")
   }
 }
 
@@ -409,7 +409,7 @@ const addShippingMethods = async db => {
         weight_total_max: 0,
       },
     })
-    winston.info("- Added shipping method")
+    logger.info("- Added shipping method")
   }
 }
 
@@ -429,7 +429,7 @@ const addPaymentMethods = async db => {
         subtotal_max: 0,
       },
     })
-    winston.info("- Added payment method")
+    logger.info("- Added payment method")
   }
 }
 
@@ -442,7 +442,7 @@ const createAllIndexes = async db => {
   if (pagesIndexes.length === 1) {
     await createIndex(db, "pages", { enabled: 1 }, null)
     await createIndex(db, "pages", { slug: 1 }, null)
-    winston.info("- Created indexes for: pages")
+    logger.info("- Created indexes for: pages")
   }
 
   const productCategoriesIndexes = await db
@@ -453,7 +453,7 @@ const createAllIndexes = async db => {
   if (productCategoriesIndexes.length === 1) {
     await createIndex(db, "productCategories", { enabled: 1 }, null)
     await createIndex(db, "productCategories", { slug: 1 }, null)
-    winston.info("- Created indexes for: productCategories")
+    logger.info("- Created indexes for: productCategories")
   }
 
   const productsIndexes = await db
@@ -484,7 +484,7 @@ const createAllIndexes = async db => {
       },
       { default_language: DEFAULT_LANGUAGE, name: "textIndex" }
     )
-    winston.info("- Created indexes for: products")
+    logger.info("- Created indexes for: products")
   }
 
   const customersIndexes = await db
@@ -508,7 +508,7 @@ const createAllIndexes = async db => {
       },
       { default_language: DEFAULT_LANGUAGE, name: "textIndex" }
     )
-    winston.info("- Created indexes for: customers")
+    logger.info("- Created indexes for: customers")
   }
 
   const ordersIndexes = await db.collection("orders").listIndexes().toArray()
@@ -531,7 +531,7 @@ const createAllIndexes = async db => {
       },
       { default_language: DEFAULT_LANGUAGE, name: "textIndex" }
     )
-    winston.info("- Created indexes for: orders")
+    logger.info("- Created indexes for: orders")
   }
 }
 
@@ -551,7 +551,7 @@ const addUser = async (db, userEmail) => {
         email: userEmail,
         scopes: ["admin"],
       })
-      winston.info(`- Added token with email: ${userEmail}`)
+      logger.info(`- Added token with email: ${userEmail}`)
     }
   }
 }
@@ -567,7 +567,7 @@ const addSettings = async (db, { domain }) => {
       },
       { upsert: true }
     )
-    winston.info(`- Set domain: ${domain}`)
+    logger.info(`- Set domain: ${domain}`)
   }
 }
 
@@ -578,9 +578,9 @@ const addSettings = async (db, { domain }) => {
   try {
     client = await MongoClient.connect(mongodbConnection, CONNECT_OPTIONS)
     db = client.db(dbName)
-    winston.info(`Successfully connected to ${mongodbConnection}`)
+    logger.info(`Successfully connected to ${mongodbConnection}`)
   } catch (e) {
-    winston.error(`MongoDB connection was failed. ${e.message}`)
+    logger.error(`MongoDB connection was failed. ${e.message}`)
     return
   }
 

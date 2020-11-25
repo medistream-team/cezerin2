@@ -1,40 +1,51 @@
 import winston from "winston"
 import winstonDaily from "winston-daily-rotate-file"
 
-const {createLogger, format, transports} = winston;
+const { createLogger, format, transports } = winston;
 const { combine, timestamp, printf } = format
 
 const logDir = 'logs' 
 let logFile = 'dev'
 if (process.env.NODE_ENV === 'staging') logFile = 'stg'
 if (process.env.NODE_ENV === 'production') logFile = 'prd'
-// NODE_ENV 가 development => dev-log-%DATE%.log, dev-access-%DATE%.log 
+
+const accessLoggerFormat = printf((message) => {
+  // console.log(JSON.parse(message.message));
+  return JSON.parse(message.message)
+})
 
 const accessLogger = createLogger({
   format: combine(
     timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss',
+      // format: 'YYYY-MM-DD HH:mm:ss',
     }),
-    format.json(),
+    // format.json(),
+    accessLoggerFormat,
     format.prettyPrint(),
     format.colorize(),
     format.splat(),
   ),
   transports: [
-  new winstonDaily({
-    level: 'info',
-    datePattern: 'YYYY-MM-DD',
-    dirname: logDir + '/access',
-    filename: `${logFile}-access-%DATE%.log`,
-    // maxFiles: 30,
-    zippedArchive: true,
-  })]
+    // console log
+    new transports.Console({
+      level: "info",
+      handleExceptions: true,
+    }),
+    // logger log
+    new winstonDaily({
+      level: 'info',
+      datePattern: 'YYYY-MM-DD',
+      dirname: logDir + '/access',
+      filename: `${logFile}-access-%DATE%.log`,
+      // maxFiles: 30,
+      zippedArchive: true,
+    })]
 })
 
 const logger = createLogger({
   format: combine(
     timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss',
+      // format: 'YYYY-MM-DD HH:mm:ss',
     }),
     format.json(),
     format.prettyPrint(),
@@ -42,11 +53,16 @@ const logger = createLogger({
     format.splat(),
   ),
   transports: [
+    // console log
     new transports.Console({
       level: "info",
       handleExceptions: true,
     }),
-    // info 레벨 로그를 저장할 파일 설정
+    new transports.Console({
+      level: "error",
+      handleExceptions: true,
+    }),
+    // logger log
     new winstonDaily({
       level: 'info',
       datePattern: 'YYYY-MM-DD',
@@ -55,7 +71,6 @@ const logger = createLogger({
       maxFiles: 30, // 30일치 로그 파일 저장
       zippedArchive: true,
     }),
-    // error 레벨 로그를 저장할 파일 설정
     new winstonDaily({
       level: 'error',
       datePattern: 'YYYY-MM-DD',
