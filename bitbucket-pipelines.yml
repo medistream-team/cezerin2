@@ -40,7 +40,7 @@ pipelines:
               --build-arg smtpFromName=$SMTP_FROM_NAME
               --build-arg smtpFromAddress=$SMTP_FROM_ADDRESS
               --build-arg jwtSecretKey=$JWT_SECRET_KEY
-              --build-arg cookieSecretKey=$COOKIE_SECRET_KEY
+              --build-arg cookieSecretKey=$COOKIE_SECRET_KEY 
             - docker push $IMAGE:$TAG
     staging-*:
       - step:
