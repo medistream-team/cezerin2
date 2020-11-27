@@ -63,9 +63,11 @@ ENV JWT_SECRET_KEY=$jwtSecretKey
 ARG cookieSecretKey=cookie
 ENV COOKIE_SECRET_KEY=$cookieSecretKey
 
+
+RUN apk add g++ make python
 # install PM2
 RUN npm -g install pm2
-RUN apt-get install -y build-essential python && rm -rf /var/lib/apt/lists/*
+
 RUN mkdir -p /var/www/cezerin2
 # download project
 ADD . /var/www/cezerin2
@@ -75,7 +77,7 @@ WORKDIR /var/www/cezerin2
 # COPY ecosystem.config.js /usr/local/bin/
 
 RUN cd /var/www/cezerin2 \
-        && yarn && yarn compile
+	&& yarn && yarn compile
 
 EXPOSE 3001
 
