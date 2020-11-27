@@ -53,6 +53,7 @@ pipelines:
             - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR_REPOSITORY
             - IMAGE=$AWS_ECR_REPOSITORY/cezerin-api
             - echo "$BITBUCKET_BRANCH" "$BITBUCKET_TAG"
+            - echo "$NODE_ENV"
             - TAG=$BITBUCKET_TAG
             - docker build -t $IMAGE:$TAG . 
               --build-arg nodeEnv=$NODE_ENV 
