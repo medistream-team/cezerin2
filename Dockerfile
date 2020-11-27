@@ -63,8 +63,6 @@ ENV JWT_SECRET_KEY=$jwtSecretKey
 ARG cookieSecretKey=cookie
 ENV COOKIE_SECRET_KEY=$cookieSecretKey
 
-
-RUN apk add g++ make python
 # install PM2
 RUN npm -g install pm2
 
