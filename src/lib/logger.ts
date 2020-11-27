@@ -9,19 +9,13 @@ let logFile = 'dev'
 if (process.env.NODE_ENV === 'staging') logFile = 'stg'
 if (process.env.NODE_ENV === 'production') logFile = 'prd'
 
-const accessLoggerFormat = printf((message) => {
-  // console.log(JSON.parse(message.message));
-  return JSON.parse(message.message)
-})
-
 const accessLogger = createLogger({
   format: combine(
     timestamp({
       // format: 'YYYY-MM-DD HH:mm:ss',
     }),
-    // format.json(),
-    accessLoggerFormat,
-    format.prettyPrint(),
+    format.json(),
+    // format.prettyPrint(),
     format.colorize(),
     format.splat(),
   ),
@@ -48,7 +42,7 @@ const logger = createLogger({
       // format: 'YYYY-MM-DD HH:mm:ss',
     }),
     format.json(),
-    format.prettyPrint(),
+    // format.prettyPrint(),
     format.colorize(),
     format.splat(),
   ),
