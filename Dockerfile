@@ -70,8 +70,8 @@ RUN npm -g install pm2
 
 RUN mkdir -p /var/www/cezerin2
 # download project
-ADD . /var/www/cezerin2
-#COPY . /var/www/cezerin2/
+# ADD . /var/www/cezerin2
+COPY . /var/www/cezerin2/
 WORKDIR /var/www/cezerin2
 
 # COPY ecosystem.config.js /usr/local/bin/
