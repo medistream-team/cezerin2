@@ -7,7 +7,7 @@ const { combine, timestamp, printf } = format
 const logDir = 'logs' 
 let logFile = 'dev'
 if (process.env.NODE_ENV === 'staging') logFile = 'stg'
-if (process.env.NODE_ENV === 'production') logFile = 'prd'
+if (process.env.NODE_ENV === 'prod') logFile = 'prd'
 
 const accessLogger = createLogger({
   format: combine(
