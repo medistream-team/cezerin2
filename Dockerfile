@@ -65,7 +65,7 @@ ENV COOKIE_SECRET_KEY=$cookieSecretKey
 
 # install PM2
 RUN npm -g install pm2
-
+RUN apt-get install -y build-essential python && rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /var/www/cezerin2
 # download project
 ADD . /var/www/cezerin2
