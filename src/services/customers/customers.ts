@@ -4,6 +4,7 @@ import parse from "../../lib/parse"
 import settings from "../../lib/settings"
 import security from "../../lib/security"
 import webhooks from "../../lib/webhooks"
+import { logger } from "../../lib/logger"
 import CustomerGroupsService from "./customerGroups"
 
 class CustomersService {
@@ -34,12 +35,18 @@ class CustomersService {
     }
 
     if (params.search) {
+      console.log("==>", params.search)
+      logger.info(`--> ${params.search}`)
       filter.$or = [
         { email: new RegExp(params.search, "i") },
         { mobile: new RegExp(params.search, "i") },
-        { $text: { $search: params.search } },
+        { "address.address1": new RegExp(params.search, "i") },
+        { full_name: new RegExp(params.search, "i") },
+        // { $regex: params.search },
+        // { $text: { $search: params.search } },
       ]
     }
+    logger.info(`customer filter :`, filter)
 
     return filter
   }
@@ -90,7 +97,7 @@ class CustomersService {
         .collection("customers")
         .count({ email: customer.email })
       if (customerCount > 0) {
-        return Promise.reject("Customer email must be unique")
+        return Promise.reject("(Add) Customer email must be unique")
       }
     }
 
@@ -108,12 +115,13 @@ class CustomersService {
 
   async updateCustomer(id, data) {
     if (!ObjectID.isValid(id)) {
+      
       return Promise.reject("Invalid identifier")
     }
     const customerObjectID = new ObjectID(id)
     const customer = this.getValidDocumentForUpdate(id, data)
 
-    if (customer instanceof Error) return;
+    if (customer instanceof Error) return
 
     // is email unique
     if (customer.email && customer.email.length > 0) {
@@ -125,7 +133,7 @@ class CustomersService {
       })
 
       if (customerCount > 0) {
-        return Promise.reject("Customer email must be unique")
+        return Promise.reject("(Update) Customer email must be unique")
       }
     }
 

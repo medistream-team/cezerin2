@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer"
 import smtpTransport from "nodemailer-smtp-transport"
-import winston from "winston"
 import EmailSettingsService from "../services/settings/email"
 import settings from "./settings"
+import { logger } from "./logger"
 
 const SMTP_FROM_CONFIG_FILE = {
   host: settings.smtpServer.host,
@@ -64,10 +64,10 @@ const send = async message => {
 
   try {
     const result = await sendMail(smtp, message)
-    winston.info("Email sent", result)
+    logger.info("Email sent", result)
     return true
   } catch (e) {
-    winston.error("Email send failed", e)
+    logger.error("Email send failed", e)
     return false
   }
 }

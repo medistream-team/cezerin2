@@ -97,7 +97,11 @@ const getAccessControlAllowOrigin = () =>
     settings.storeBaseUrl,
     settings.adminBaseURL,
     "http://localhost:8080",
+    "https://tools.medistream.co.kr",
+    "https://tools.stg.medistream.co.kr",
+    "http://medistream.co.kr",
     "http://dev.medistream.co.kr:8000",
+    "http://dev.medistream.co.kr:8080",
     "https://stg.medistream.co.kr",
   ] || "*"
 

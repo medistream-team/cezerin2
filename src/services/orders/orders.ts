@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt"
 import handlebars from "handlebars"
 import { ObjectID } from "mongodb"
+import { logger } from "../../lib/logger"
 import dashboardWebSocket from "../../lib/dashboardWebSocket"
 import mailer from "../../lib/mailer"
 import { db } from "../../lib/mongo"
@@ -129,11 +130,24 @@ class OrdersService {
       }
 
       alternativeSearch.push({ first_name: new RegExp(params.search, "i") })
-      alternativeSearch.push({ last_name: new RegExp(params.search, "i") })
-      alternativeSearch.push({ password: new RegExp(params.search, "i") })
+      // alternativeSearch.push({ last_name: new RegExp(params.search, "i") })
+      // alternativeSearch.push({ password: new RegExp(params.search, "i") })
       alternativeSearch.push({ email: new RegExp(params.search, "i") })
       alternativeSearch.push({ mobile: new RegExp(params.search, "i") })
-      alternativeSearch.push({ $text: { $search: params.search } })
+      // alternativeSearch.push({ $text: { $search: params.search } })
+      // alternativeSearch.push({ $regex: params.search })
+      alternativeSearch.push({
+        "shipping_address.address1": new RegExp(params.search, "i"),
+      })
+      alternativeSearch.push({
+        "shipping_address.full_name": new RegExp(params.search, "i"),
+      })
+      alternativeSearch.push({
+        "billing_address.address1": new RegExp(params.search, "i"),
+      })
+      alternativeSearch.push({
+        "billing_address.full_name": new RegExp(params.search, "i"),
+      })
 
       filter.$or = alternativeSearch
     }
@@ -268,6 +282,9 @@ class OrdersService {
   }
 
   async deleteOrder(orderId) {
+    logger.error(">>> deleteOrder refused: " + orderId)
+    // console.error(">>> deleteOrder refused: " + orderId)
+    // return Promise.reject("deleteOrder refused: " + orderId)
     if (!ObjectID.isValid(orderId)) {
       return Promise.reject("Invalid identifier")
     }

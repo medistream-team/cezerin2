@@ -4,6 +4,7 @@ import express from "express"
 import handlebars from "handlebars"
 import jwt from "jsonwebtoken"
 import { ObjectID } from "mongodb"
+import { logger } from "./lib/logger"
 import AuthHeader from "./lib/auth-header"
 import mailer from "./lib/mailer"
 import { db } from "./lib/mongo"
@@ -572,6 +573,7 @@ ajaxRouter.put("/customer-account", async (req, res, next) => {
       }
     )
   } catch (error) {
+    logger.error(error)
     console.log(error)
   }
 })
