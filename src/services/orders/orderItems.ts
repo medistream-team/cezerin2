@@ -438,7 +438,7 @@ class OrderItemsService {
       item["items.$.quantity"] = parse.getNumberIfPositive(data.quantity)
     }
 
-    return item
+    return { ...item, ...data }
   }
 }
 
