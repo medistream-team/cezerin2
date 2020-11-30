@@ -696,7 +696,6 @@ class ProductsService {
       meta_title: {},
       tags: {},
       attributes: {},
-      attenabledributes: {},
       enabled: {},
       discontinued: {},
       slug: {},
