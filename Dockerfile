@@ -21,6 +21,9 @@ ENV ASSETS_TYPE=$assetsType
 ARG assetsBaseUrl=http://localhost:3001
 ENV ASSETS_BASE_URL=$assetsBaseUrl
 
+ARG dbUrl=mongodb://$dbUser:$dbPass@$dbHost:$dbPort/$dbName
+ENV DB_URL=$dbUrl
+
 ARG dbHost=127.0.0.1
 ENV DB_HOST=$dbHost
 
