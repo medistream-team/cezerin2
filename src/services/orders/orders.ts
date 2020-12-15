@@ -396,6 +396,7 @@ class OrdersService {
         order.shipping_address = parse.getOrderAddress(data.shipping_address)
 
         order.tax_rate = parse.getNumberIfPositive(data.tax_rate) || 0
+        order.shippings = data.shippings && data.shippings.length > 0 ? data.shippings : []
         order.shipping_tax = parse.getNumberIfPositive(data.shipping_tax) || 0
         order.shipping_discount =
           parse.getNumberIfPositive(data.shipping_discount) || 0
@@ -542,6 +543,9 @@ class OrdersService {
       }
       if (data.tracking_number !== undefined) {
         order.tracking_number = parse.getString(data.tracking_number)
+      }
+      if (data.shippings !== undefined) {
+        order.shippings = data.shippings
       }
       if (data.shipping_status !== undefined) {
         order.shipping_status = parse.getString(data.shipping_status)

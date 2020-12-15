@@ -1,6 +1,5 @@
 import { MongoClient } from "mongodb"
 import url from "url"
-import winston from "winston"
 import { logger } from "./logger"
 import settings from "./settings"
 
