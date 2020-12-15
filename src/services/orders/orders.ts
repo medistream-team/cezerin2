@@ -368,7 +368,6 @@ class OrdersService {
           date_cancelled: null,
           number: orderNumber,
           shipping_status: "",
-          shipping: data.shipping,
           // 'weight_total': 0,
           // 'discount_total': 0, //sum(items.discount_total)+sum(discounts.amount)
           // 'tax_included_total': 0, //if(item_tax_included, 0, item_tax) + if(shipment_tax_included, 0, shipping_tax)
@@ -397,6 +396,7 @@ class OrdersService {
         order.shipping_address = parse.getOrderAddress(data.shipping_address)
 
         order.tax_rate = parse.getNumberIfPositive(data.tax_rate) || 0
+        order.shippings = data.shippings && data.shippings.length > 0 ? data.shippings : []
         order.shipping_tax = parse.getNumberIfPositive(data.shipping_tax) || 0
         order.shipping_discount =
           parse.getNumberIfPositive(data.shipping_discount) || 0
@@ -544,8 +544,8 @@ class OrdersService {
       if (data.tracking_number !== undefined) {
         order.tracking_number = parse.getString(data.tracking_number)
       }
-      if (data.shipping !== undefined) {
-        order.shipping = data.shipping
+      if (data.shippings !== undefined) {
+        order.shippings = data.shippings
       }
       if (data.shipping_status !== undefined) {
         order.shipping_status = parse.getString(data.shipping_status)
