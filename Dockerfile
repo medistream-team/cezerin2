@@ -21,23 +21,8 @@ ENV ASSETS_TYPE=$assetsType
 ARG assetsBaseUrl=http://localhost:3001
 ENV ASSETS_BASE_URL=$assetsBaseUrl
 
-ARG dbUrl=mongodb
+ARG dbUrl=mongodb://medistream:password@localhost:27017
 ENV DB_URL=$dbUrl
-
-ARG dbHost=127.0.0.1
-ENV DB_HOST=$dbHost
-
-ARG dbPort=27017
-ENV DB_PORT=$dbPort
-
-ARG dbName=market
-ENV DB_NAME=$dbName
-
-ARG dbUser=medistream
-ENV DB_USER=$dbUser
-
-ARG dbPass=medistream
-ENV DB_PASS=$dbPass
 
 ARG smtpHost=smtp
 ENV SMTP_HOST=$smtpHost

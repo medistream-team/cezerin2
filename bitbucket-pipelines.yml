@@ -59,11 +59,7 @@ pipelines:
               --build-arg apiWebSocketUrl=$API_WEB_SOCKET_URL
               --build-arg assetsType=$ASSETS_TYPE
               --build-arg assetsBaseUrl=$ASSETS_BASE_URL
-              --build-arg dbHost=$DB_HOST
-              --build-arg dbPort=$DB_PORT
-              --build-arg dbName=$DB_NAME
-              --build-arg dbUser=$DB_USER
-              --build-arg dbPass=$DB_PASS
+              --build-arg dbUrl=$DB_URL
               --build-arg smtpHost=$SMTP_HOST
               --build-arg smtpPort=$SMTP_PORT
               --build-arg smtpSecure=$SMTP_SECURE
