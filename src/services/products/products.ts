@@ -259,7 +259,8 @@ class ProductsService {
       aggregation.push({ $project: projectQuery })
       aggregation.push({ $match: attributesMatchQuery })
       aggregation.push({ $unwind: "$attributes" })
-      aggregation.push({ $group: { _id: "$attributes", count: { $sum: 1 } } })
+      // aggregation.push({ $group: { _id: "$attributes", count: { $sum: 1 } } })
+      aggregation.push({ $group: { _id: { name: "$attributes.name", value: "$attributes.value" }, count: { $sum: 1 } } })
       return db.collection("products").aggregate(aggregation).toArray()
     }
     return null
@@ -283,7 +284,9 @@ class ProductsService {
       aggregation.push({ $project: projectQuery })
       aggregation.push({ $match: attributesMatchQuery })
       aggregation.push({ $unwind: "$attributes" })
-      aggregation.push({ $group: { _id: "$attributes", count: { $sum: 1 } } })
+      // aggregation.push({ $group: { _id: "$attributes", count: { $sum: 1 } } })
+      aggregation.push({ $group: { _id: { name: "$attributes.name", value: "$attributes.value" }, count: { $sum: 1 } } })
+
       return db.collection("products").aggregate(aggregation).toArray()
     }
     return null
