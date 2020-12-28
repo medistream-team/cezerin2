@@ -6,10 +6,11 @@ import ProductOptionValuesService from "../services/products/optionValues"
 import ProductsService from "../services/products/products"
 import ProductVariantsService from "../services/products/variants"
 
-class ProductsRoute {
-  index = 'market'
-  documentType = 'products'
+const documentType = 'products'
+let index = 'market-stg'
+if (process.env.NODE_ENV === 'prod') index = 'market'
 
+class ProductsRoute {
   constructor(public router) {
     this.router = router
     this.registerRoutes()
@@ -174,8 +175,8 @@ class ProductsRoute {
     ProductsService.addProduct(req.body)
       .then(data => {
         
-        data.indexName = this.index
-        data.documentType = this.documentType
+        data.indexName = index
+        data.documentType = documentType
         data.requestMethod = req.method
         logger.info(JSON.stringify(data))
         return res.send(data)
@@ -187,8 +188,8 @@ class ProductsRoute {
     ProductsService.updateProduct(req.params.productId, req.body)
       .then(data => {
         if (data) {
-          data.indexName = this.index
-          data.documentType = this.documentType
+          data.indexName = index
+          data.documentType = documentType
           data.requestMethod = req.method
           logger.info(JSON.stringify(data))
           return res.send(data)
@@ -265,8 +266,8 @@ class ProductsRoute {
     ProductOptionsService.addOption(req.params.productId, req.body)
       .then(data => {
         
-        data.indexName = this.index
-        data.documentType = this.documentType
+        data.indexName = index
+        data.documentType = documentType
         data.requestMethod = req.method
         logger.info(JSON.stringify(data))
         return res.send(data)
@@ -282,8 +283,8 @@ class ProductsRoute {
     )
       .then(data => {
         
-        data.indexName = this.index
-        data.documentType = this.documentType
+        data.indexName = index
+        data.documentType = documentType
         data.requestMethod = req.method
         logger.info(JSON.stringify(data))
         return res.send(data)
@@ -297,8 +298,8 @@ class ProductsRoute {
       req.params.optionId
     )
       .then(data => {
-        data.indexName = this.index
-        data.documentType = this.documentType
+        data.indexName = index
+        data.documentType = documentType
         data.requestMethod = req.method
         logger.info(JSON.stringify(data))
         return res.send(data)
@@ -337,8 +338,8 @@ class ProductsRoute {
       req.body
     )
       .then(data => {
-        data.indexName = this.index
-        data.documentType = this.documentType
+        data.indexName = index
+        data.documentType = documentType
         data.requestMethod = req.method
         logger.info(JSON.stringify(data))
         return res.send(data)
@@ -369,8 +370,8 @@ class ProductsRoute {
       req.params.valueId
     )
       .then(data => {
-        data.indexName = this.index
-        data.documentType = this.documentType
+        data.indexName = index
+        data.documentType = documentType
         data.requestMethod = req.method
         logger.info(JSON.stringify(data))
         return res.send(data)
@@ -387,8 +388,8 @@ class ProductsRoute {
   addVariant(req, res, next) {
     ProductVariantsService.addVariant(req.params.productId, req.body)
       .then(data => {
-        data.indexName = this.index
-        data.documentType = this.documentType
+        data.indexName = index
+        data.documentType = documentType
         data.requestMethod = req.method
         logger.info(JSON.stringify(data))
         return res.send(data)
@@ -403,8 +404,8 @@ class ProductsRoute {
       req.body
     )
       .then(data => {
-        data.indexName = this.index
-        data.documentType = this.documentType
+        data.indexName = index
+        data.documentType = documentType
         data.requestMethod = req.method
         logger.info(JSON.stringify(data))
         return res.send(data)
@@ -418,8 +419,8 @@ class ProductsRoute {
       req.params.variantId
     )
       .then(data => {
-        data.indexName = this.index
-        data.documentType = this.documentType
+        data.indexName = index
+        data.documentType = documentType
         data.requestMethod = req.method
         logger.info(JSON.stringify(data))
         return res.send(data)
@@ -434,8 +435,8 @@ class ProductsRoute {
       req.body
     )
       .then(data => {
-        data.indexName = this.index
-        data.documentType = this.documentType
+        data.indexName = index
+        data.documentType = documentType
         data.requestMethod = req.method
         logger.info('setVariantOption', data)
         return res.send(data)
