@@ -7,7 +7,7 @@ const { combine, timestamp, printf } = format
 const logDir = 'logs' 
 let logFile = 'dev'
 if (process.env.NODE_ENV === 'staging') logFile = 'stg'
-if (process.env.NODE_ENV === 'production') logFile = 'prd'
+if (process.env.NODE_ENV === 'prod') logFile = 'prd'
 
 const accessLogger = createLogger({
   format: combine(
@@ -31,7 +31,15 @@ const accessLogger = createLogger({
       datePattern: 'YYYY-MM-DD',
       dirname: logDir + '/access',
       filename: `${logFile}-access-%DATE%.log`,
-      // maxFiles: 30,
+      maxFiles: 30,
+      zippedArchive: true,
+    }),
+    new winstonDaily({
+      level: 'error',
+      datePattern: 'YYYY-MM-DD',
+      dirname: logDir + '/error',
+      filename: `${logFile}-error-%DATE%.log`,
+      maxFiles: 30,
       zippedArchive: true,
     })]
 })
@@ -62,15 +70,15 @@ const logger = createLogger({
       datePattern: 'YYYY-MM-DD',
       dirname: logDir,
       filename: `${logFile}-log-%DATE%.log`,
-      maxFiles: 30, // 30일치 로그 파일 저장
+      maxFiles: 15, // 30일치 로그 파일 저장
       zippedArchive: true,
     }),
     new winstonDaily({
       level: 'error',
       datePattern: 'YYYY-MM-DD',
       dirname: logDir + '/error', // error.log 파일은 /logs/error 하위에 저장
-      filename: `${logFile}-log-%DATE%.error.log`,
-      maxFiles: 30,
+      filename: `${logFile}-error-%DATE%.log`,
+      maxFiles: 15,
       zippedArchive: true,
     })
   ],

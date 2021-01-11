@@ -1,9 +1,14 @@
+import { logger } from "../lib/logger"
 import security from "../lib/security"
 import ProductImagesService from "../services/products/images"
 import ProductOptionsService from "../services/products/options"
 import ProductOptionValuesService from "../services/products/optionValues"
 import ProductsService from "../services/products/products"
 import ProductVariantsService from "../services/products/variants"
+
+const documentType = 'products'
+let index = 'market-stg'
+if (process.env.NODE_ENV === 'prod') index = 'market'
 
 class ProductsRoute {
   constructor(public router) {
@@ -168,7 +173,14 @@ class ProductsRoute {
 
   addProduct(req, res, next) {
     ProductsService.addProduct(req.body)
-      .then(data => res.send(data))
+      .then(data => {
+        
+        data.indexName = index
+        data.documentType = documentType
+        data.requestMethod = req.method
+        logger.info(JSON.stringify(data))
+        return res.send(data)
+      })
       .catch(next)
   }
 
@@ -176,6 +188,10 @@ class ProductsRoute {
     ProductsService.updateProduct(req.params.productId, req.body)
       .then(data => {
         if (data) {
+          data.indexName = index
+          data.documentType = documentType
+          data.requestMethod = req.method
+          logger.info(JSON.stringify(data))
           return res.send(data)
         }
         return res.status(404).end()
@@ -248,7 +264,14 @@ class ProductsRoute {
 
   addOption(req, res, next) {
     ProductOptionsService.addOption(req.params.productId, req.body)
-      .then(data => res.send(data))
+      .then(data => {
+        
+        data.indexName = index
+        data.documentType = documentType
+        data.requestMethod = req.method
+        logger.info(JSON.stringify(data))
+        return res.send(data)
+      })
       .catch(next)
   }
 
@@ -258,7 +281,14 @@ class ProductsRoute {
       req.params.optionId,
       req.body
     )
-      .then(data => res.send(data))
+      .then(data => {
+        
+        data.indexName = index
+        data.documentType = documentType
+        data.requestMethod = req.method
+        logger.info(JSON.stringify(data))
+        return res.send(data)
+      })
       .catch(next)
   }
 
@@ -267,7 +297,13 @@ class ProductsRoute {
       req.params.productId,
       req.params.optionId
     )
-      .then(data => res.send(data))
+      .then(data => {
+        data.indexName = index
+        data.documentType = documentType
+        data.requestMethod = req.method
+        logger.info(JSON.stringify(data))
+        return res.send(data)
+      })
       .catch(next)
   }
 
@@ -301,7 +337,13 @@ class ProductsRoute {
       req.params.optionId,
       req.body
     )
-      .then(data => res.send(data))
+      .then(data => {
+        data.indexName = index
+        data.documentType = documentType
+        data.requestMethod = req.method
+        logger.info(JSON.stringify(data))
+        return res.send(data)
+      })
       .catch(next)
   }
 
@@ -312,7 +354,12 @@ class ProductsRoute {
       req.params.valueId,
       req.body
     )
-      .then(data => res.send(data))
+      .then(data => {
+        data.requestUrl = req.url
+        data.requestMethod = req.method
+        logger.info(JSON.stringify(data))
+        return res.send(data)
+      })
       .catch(next)
   }
 
@@ -322,7 +369,13 @@ class ProductsRoute {
       req.params.optionId,
       req.params.valueId
     )
-      .then(data => res.send(data))
+      .then(data => {
+        data.indexName = index
+        data.documentType = documentType
+        data.requestMethod = req.method
+        logger.info(JSON.stringify(data))
+        return res.send(data)
+      })
       .catch(next)
   }
 
@@ -334,7 +387,13 @@ class ProductsRoute {
 
   addVariant(req, res, next) {
     ProductVariantsService.addVariant(req.params.productId, req.body)
-      .then(data => res.send(data))
+      .then(data => {
+        data.indexName = index
+        data.documentType = documentType
+        data.requestMethod = req.method
+        logger.info(JSON.stringify(data))
+        return res.send(data)
+      })
       .catch(next)
   }
 
@@ -344,7 +403,13 @@ class ProductsRoute {
       req.params.variantId,
       req.body
     )
-      .then(data => res.send(data))
+      .then(data => {
+        data.indexName = index
+        data.documentType = documentType
+        data.requestMethod = req.method
+        logger.info(JSON.stringify(data))
+        return res.send(data)
+      })
       .catch(next)
   }
 
@@ -353,7 +418,13 @@ class ProductsRoute {
       req.params.productId,
       req.params.variantId
     )
-      .then(data => res.send(data))
+      .then(data => {
+        data.indexName = index
+        data.documentType = documentType
+        data.requestMethod = req.method
+        logger.info(JSON.stringify(data))
+        return res.send(data)
+      })
       .catch(next)
   }
 
@@ -363,7 +434,13 @@ class ProductsRoute {
       req.params.variantId,
       req.body
     )
-      .then(data => res.send(data))
+      .then(data => {
+        data.indexName = index
+        data.documentType = documentType
+        data.requestMethod = req.method
+        logger.info('setVariantOption', data)
+        return res.send(data)
+      })
       .catch(next)
   }
 }

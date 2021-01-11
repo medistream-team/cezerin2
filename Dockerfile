@@ -21,20 +21,8 @@ ENV ASSETS_TYPE=$assetsType
 ARG assetsBaseUrl=http://localhost:3001
 ENV ASSETS_BASE_URL=$assetsBaseUrl
 
-ARG dbHost=127.0.0.1
-ENV DB_HOST=$dbHost
-
-ARG dbPort=27017
-ENV DB_PORT=$dbPort
-
-ARG dbName=market
-ENV DB_NAME=$dbName
-
-ARG dbUser=medistream
-ENV DB_USER=$dbUser
-
-ARG dbPass=medistream
-ENV DB_PASS=$dbPass
+ARG dbUrl=mongodb://medistream:password@localhost:27017
+ENV DB_URL=$dbUrl
 
 ARG smtpHost=smtp
 ENV SMTP_HOST=$smtpHost
@@ -68,14 +56,14 @@ RUN npm -g install pm2
 
 RUN mkdir -p /var/www/cezerin2
 # download project
-ADD . /var/www/cezerin2
-#COPY . /var/www/cezerin2/
+# ADD . /var/www/cezerin2
+COPY . /var/www/cezerin2/
 WORKDIR /var/www/cezerin2
 
 # COPY ecosystem.config.js /usr/local/bin/
 
 RUN cd /var/www/cezerin2 \
-        && yarn && yarn compile
+	&& yarn && yarn compile
 
 EXPOSE 3001
 

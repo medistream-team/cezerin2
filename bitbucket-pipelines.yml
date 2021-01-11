@@ -27,11 +27,7 @@ pipelines:
               --build-arg apiWebSocketUrl=$API_WEB_SOCKET_URL
               --build-arg assetsType=$ASSETS_TYPE
               --build-arg assetsBaseUrl=$ASSETS_BASE_URL
-              --build-arg dbHost=$DB_HOST
-              --build-arg dbPort=$DB_PORT
-              --build-arg dbName=$DB_NAME
-              --build-arg dbUser=$DB_USER
-              --build-arg dbPass=$DB_PASS
+              --build-arg dbUrl=$DB_URL
               --build-arg smtpHost=$SMTP_HOST
               --build-arg smtpPort=$SMTP_PORT
               --build-arg smtpSecure=$SMTP_SECURE
@@ -40,7 +36,7 @@ pipelines:
               --build-arg smtpFromName=$SMTP_FROM_NAME
               --build-arg smtpFromAddress=$SMTP_FROM_ADDRESS
               --build-arg jwtSecretKey=$JWT_SECRET_KEY
-              --build-arg cookieSecretKey=$COOKIE_SECRET_KEY
+              --build-arg cookieSecretKey=$COOKIE_SECRET_KEY 
             - docker push $IMAGE:$TAG
     staging-*:
       - step:
@@ -53,6 +49,7 @@ pipelines:
             - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ECR_REPOSITORY
             - IMAGE=$AWS_ECR_REPOSITORY/cezerin-api
             - echo "$BITBUCKET_BRANCH" "$BITBUCKET_TAG"
+            - echo "$NODE_ENV"
             - TAG=$BITBUCKET_TAG
             - docker build -t $IMAGE:$TAG . 
               --build-arg nodeEnv=$NODE_ENV 
@@ -62,11 +59,7 @@ pipelines:
               --build-arg apiWebSocketUrl=$API_WEB_SOCKET_URL
               --build-arg assetsType=$ASSETS_TYPE
               --build-arg assetsBaseUrl=$ASSETS_BASE_URL
-              --build-arg dbHost=$DB_HOST
-              --build-arg dbPort=$DB_PORT
-              --build-arg dbName=$DB_NAME
-              --build-arg dbUser=$DB_USER
-              --build-arg dbPass=$DB_PASS
+              --build-arg dbUrl=$DB_URL
               --build-arg smtpHost=$SMTP_HOST
               --build-arg smtpPort=$SMTP_PORT
               --build-arg smtpSecure=$SMTP_SECURE
